@@ -1,0 +1,44 @@
+<var a=5/>
+<var b=6/>
+<var een-string="poep">
+<var een-char='b'>
+
+<truth>timo-is-an-asshole</truth>
+<!-- bool timo-is-an-asshole = true; -->
+
+<lie>hilko-is-an-asshole</lie>
+<!-- bool hilko-is-an-asshole = false; -->
+
+<var c=a type=int>
+
+<logic if="a() > 4">
+
+    <decrement a/>
+    <assign a=3/>
+
+    <var x="a == 5 ? 10 : 20" type="logic">
+
+    <call func="hello">
+        <param>1 == 1 ? "hoi" : "doei"</param>
+    </call>
+    <!-- hello(1 == 1 ? "hoi" : "doei"); -->
+
+    <assign a>
+        <call func="multiply">
+            <param>4</param>
+            <param>20</param>
+        </call>
+    </assing>
+    <!-- or: -->
+    <assign a="multiply(4, 20)" type="logic">
+    <!-- a = multiply(4, 20); -->
+
+    <call func="hello">
+        <param>a</param>
+    </call>
+    <!-- hello(a); -->
+
+    a + b
+    <!-- print(a + b); -->
+
+</logic>
