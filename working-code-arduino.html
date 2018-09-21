@@ -1,0 +1,100 @@
+<include> arduino </include>
+
+<!-- multi-line
+comments
+work -->
+
+<var a=5/>
+a
+<var b=6/>
+<var een-string="po
+ep"/>
+
+
+<var een-char='b'/>
+
+<truth>timo-is-an-asshole</truth>
+
+<lie>hilko-is-an-asshole</lie>
+
+<var c=a type="int"/>
+
+<assign a>100</assign>
+
+<logic if="a() < 4">
+
+    <assign a>50 < 40</assign>
+
+    <var x="a == 5 ? 10 : 20" type="int"/>
+
+    <hello>
+        <param>1 == 1 ? "hoi" : "doei"</param>
+    </hello>
+
+    <!-- a = multiply(4, 20); -->
+    <assign a>
+        <multiply>
+            <param>4</param>
+            <param>20</param>
+        </multiply>
+    </assign>
+    
+    
+    a + b
+</logic>
+
+<def multiply-poep returns="int">
+    <param a type="int"/>
+    <param b type="int"/>
+
+    <return>a*b</return>
+</def>
+
+<multiply>
+    <param>4</param>
+    <param>5</param>
+</multiply>
+
+Dit is text dat moet worden geschreven verstuurd naar een seriele monitor
+
+<c>
+
+    // this is c code
+    char thisIsAChar = 'b';
+
+
+</c>
+
+<!--
+void loop() {
+digitalWrite(10, HIGH);
+delay(500);
+digitalWrite(10, LOW);
+delay(500);
+} 
+-->
+<def arduino.loop returns="void">
+   <arduino.setPin>
+      <param>10</param>
+      <param>truth</param>
+   </arduino.setPin>
+
+   <arduino.delay>
+      <param>500</param>
+   </arduino.delay>
+
+   <arduino.setPin>
+      <param>10</param>
+      <param>lie</param>
+   </arduino.setPin>
+
+   <arduino.delay>
+      <param>500</param>
+   </arduino.delay>
+</arduino.loop>
+
+<!--
+Alles buiten de void loop wordt in de void setup geplaats,
+functies worden beschreven buiten de loop en setup.
+Wanneer tekst wordt geschreven tussen de commando, wordt dit gecompileerd naar Serial.print("tekst")
+-->
