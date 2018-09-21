@@ -7,19 +7,19 @@ class HTMLParser:
 
         html = open(filepath).read()
 
-        elements = html.split("<")
-        line = 0
-        for el in elements:
+        tags = self.split_html_by_tags(html)
+        line = re.split(".+", html)[0].count("\n")  # number of empty lines at top of file
+        for tag in tags:
             start_line = line + 1
-            line += el.count("\n")
-            el = el.strip()
+            line += tag.count("\n")
+            tag = tag.strip()
 
-            if el.isspace() or len(el) == 0:
+            if tag.isspace() or len(tag) == 0:
                 continue
 
-            tag = el.split(">")[0]
-            tagname = tag.split(" ")[0].replace("/", "")
-            data = el.split(">")[1]
+            tagname_and_attrs = tag[1:].split(">")[0]
+            tagname = tagname_and_attrs.split(" ")[0].replace("/", "")
+            data = tag.split(">")[1]
 
             if tagname == "!--":
                 # woo its a comment
@@ -28,14 +28,14 @@ class HTMLParser:
                     self.handle_data(data, start_line)
                 continue
 
-            is_self_closing_tag = tag.endswith("/")  # <p/> is a self closing tag
-            is_closing_tag = tag.startswith("/")     # </p> is a closing tag
+            is_self_closing_tag = tagname_and_attrs.endswith("/")  # <p/> is a self closing tag
+            is_closing_tag = tag.startswith("</")     # </p> is a closing tag
 
             if is_self_closing_tag:
                 tag = tag[:-1]
 
             if not is_closing_tag:
-                self.handle_starttag(tagname, self.parse_attrs(tag), start_line)
+                self.handle_starttag(tagname, self.parse_attrs(tagname_and_attrs), start_line)
             elif is_closing_tag:
                 self.handle_closingtag(tagname, start_line)
 
@@ -47,8 +47,11 @@ class HTMLParser:
 
         self.finish_parsing()
 
-    def parse_attrs(self, tag):
-        attr_strings = re.split(" |\n", tag)
+    def parse_attrs(self, tagname_and_attrs):
+        if tagname_and_attrs.endswith("/"):
+            tagname_and_attrs = tagname_and_attrs[:-1]
+
+        attr_strings = re.split(" |\n", tagname_and_attrs)
         del attr_strings[0]     # the tagname is not an attribute
 
         if len(attr_strings) == 0:
@@ -89,6 +92,27 @@ class HTMLParser:
                 "val": val
             }
         return attrs
+
+    def split_html_by_tags(self, html):
+        in_string = False
+        string_quotes = '"'
+        split_at_indices = []
+
+        for i in range(len(html)):
+            char = html[i]
+            if char == '"' or char == "'":
+                if in_string and string_quotes == char:
+                    in_string = False
+                elif not in_string:
+                    in_string = True
+                    string_quotes = char
+
+            if char == "<" and i < len(html) - 1:
+                valid_opening_tag = not in_string and not html[i + 1].isspace()
+                if valid_opening_tag:
+                    split_at_indices.append(i)
+
+        return [html[i:j] for i,j in zip(split_at_indices, split_at_indices[1:]+[None])]
 
     def handle_comment(self, comment_text, line):
         pass

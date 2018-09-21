@@ -95,7 +95,12 @@ class Compiler(HTMLParser):
 
 compiler = Compiler()
 compiler.feed("../working-code.html")
-print(compiler.to_c())
+c = compiler.to_c()
+print(c)
+
+file = open("../working-code.c", "w")
+file.write(c)
+file.close()
 
 while 1:
     pass
