@@ -13,14 +13,6 @@ class Loop(Element):
     """
 
     def to_c(self):
-        # return_type = self.attributes.get("returns", {}).get("val", "void")
-        # func_name = None
-        # for key in self.attributes:
-        #     if key != "returns":
-        #         func_name = hyphenated_to_camel_case(key)
-
-        # params = []
-
 
         # var_from = 0 + self.attributes["from"]
         from_type = self.attributes.get("from", {}).get("type", "int")
