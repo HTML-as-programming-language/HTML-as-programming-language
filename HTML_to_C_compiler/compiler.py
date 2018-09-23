@@ -7,6 +7,7 @@ from elements.function import Def, Param
 from elements.function_call import FunctionCall
 from elements.return_element import Return
 from elements.var import Var
+from elements.loop import Loop
 from elements.Include import Include
 from html_parser.parser import HTMLParser
 from utils import camel_case_to_hyphenated
@@ -36,6 +37,7 @@ class Compiler(HTMLParser):
             Var,        # <var a=5/>
             Truth,      # <truth>x</truth>
             Lie,
+            Loop,
             Assign,
             C,
             Assembly,
