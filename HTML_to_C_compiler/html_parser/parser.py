@@ -2,12 +2,32 @@ import re
 
 
 class HTMLParser:
+    """
+    The HTML parser reads the HTML file that is given in feed()
+    While it reads the HTML file it will call several methods:
+
+        - handle_starttag() when it encounters a start-tag like <var a=5>
+
+        - handle_data() when it encounters text/data inside an element like ..>data here</..
+
+        - handle_closingtag() when it encounters a closing-tag like </var>
+
+        - handle_comment() when it encounters a comment like <!-- hello -->
+
+        - finish_parsing() when it is done reading the file
+
+    These methods are empty by default and can be implemented by a subclass
+    """
 
     def feed(self, filepath):
+        """
+        call this to start reading a HTML file
+        :param filepath: for example: "../working-code.html"
+        """
 
         html = open(filepath).read()
 
-        tags = self.split_html_by_tags(html)
+        tags = self.__split_html_by_tags(html)
         line = re.split(".+", html)[0].count("\n")  # number of empty lines at top of file
         for tag in tags:
             start_line = line + 1
@@ -19,23 +39,22 @@ class HTMLParser:
 
             tagname_and_attrs = tag[1:].split(">")[0]
             tagname = tagname_and_attrs.split(" ")[0].replace("/", "")
-            data = tag.split(">")[1]
 
             if tagname == "!--":
                 # woo its a comment
-                self.handle_comment(tag[3:][:-3], start_line)
-                if len(data) > 0 and not data.isspace():
-                    self.handle_data(data, start_line)
+                self.handle_comment(tag[4:][:-3], start_line)
                 continue
 
-            is_self_closing_tag = tagname_and_attrs.endswith("/")  # <p/> is a self closing tag
-            is_closing_tag = tag.startswith("</")     # </p> is a closing tag
+            data = tag.split(">")[1]
+
+            is_self_closing_tag = tagname_and_attrs.endswith("/")   # <p/> is a self closing tag
+            is_closing_tag = tag.startswith("</")                   # </p> is a closing tag
 
             if is_self_closing_tag:
                 tag = tag[:-1]
 
             if not is_closing_tag:
-                self.handle_starttag(tagname, self.parse_attrs(tagname_and_attrs), start_line)
+                self.handle_starttag(tagname, self.__parse_attrs(tagname_and_attrs), start_line)
             elif is_closing_tag:
                 self.handle_closingtag(tagname, start_line)
 
@@ -47,7 +66,15 @@ class HTMLParser:
 
         self.finish_parsing()
 
-    def parse_attrs(self, tagname_and_attrs):
+    def __parse_attrs(self, tagname_and_attrs):
+        """
+        This function will parse the attributes of a tag
+        (this function should only be used by the HTML parser itself, aka 'private' in java)
+
+        :param tagname_and_attrs: for example: 'var a=5 hello="hey"/'
+        :return: dict of attributes, for example: {a: {val: 5, type='int'}, hello: {val: 'hey', type: 'String'}}
+        """
+
         if tagname_and_attrs.endswith("/"):
             tagname_and_attrs = tagname_and_attrs[:-1]
 
@@ -93,7 +120,8 @@ class HTMLParser:
             }
         return attrs
 
-    def split_html_by_tags(self, html):
+    def __split_html_by_tags(self, html):
+        in_comment = False
         in_string = False
         string_quotes = '"'
         split_at_indices = []
@@ -107,8 +135,19 @@ class HTMLParser:
                     in_string = True
                     string_quotes = char
 
+            opening_of_comment = html[i:i+4] == "<!--"
+            if opening_of_comment:
+                in_comment = True
+            elif in_comment and html[i:i+3] == "-->":
+                in_comment = False
             if char == "<" and i < len(html) - 1:
-                valid_opening_tag = not in_string and not html[i + 1].isspace()
+                next_char = html[i + 1]
+                valid_opening_tag = (
+                    not in_string
+                    and not next_char.isspace()
+                    and not next_char == "="
+                    and not (in_comment and not opening_of_comment)
+                )
                 if valid_opening_tag:
                     split_at_indices.append(i)
 

@@ -14,11 +14,12 @@ class FunctionCall(Element):
     def to_c(self):
 
         params = []
+        # get params:
         for el in self.children:
             if el.tagname == "param":
                 params.append(el.data.strip())
 
-        return "{}({})\n".format(
+        return "{}({})\n".format(  # for example: multiply(4, 5)
             self.tagname,
             ", ".join([param for param in params])
         )
