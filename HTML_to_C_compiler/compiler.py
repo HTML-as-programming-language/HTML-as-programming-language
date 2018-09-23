@@ -142,7 +142,6 @@ class Compiler(HTMLParser):
     def isArduinoCode(self):
         return self.isArduino
 
-
 compiler = Compiler()                       # Construct the compiler
 compiler.feed("../working-code.html")       # Feed a HTML file to the compiler
 c = compiler.to_c()                         # Get the C code
