@@ -7,6 +7,7 @@ from elements.function import Def, Param
 from elements.function_call import FunctionCall
 from elements.return_element import Return
 from elements.var import Var
+from elements.Include import Include
 from html_parser.parser import HTMLParser
 from utils import camel_case_to_hyphenated
 
@@ -41,8 +42,10 @@ class Compiler(HTMLParser):
             Def,        # <def functionname></def>
             Param,
             Return,
-            Comment     # <!-- this is a comment --> OR <comment text="this is a comment"/>
+            Comment,     # <!-- this is a comment --> OR <comment text="this is a comment"/>
+            Include
         ]
+        self.isArduino = False #geeft aan of de code moet worden gecompileerd naar een .ino bestand voor de Arduino
 
     def handle_starttag(self, tagname, attrs, line):
         """
@@ -124,10 +127,20 @@ class Compiler(HTMLParser):
         c = ""
         for el in self.elements:
             el_c = el.to_c()
+
+            #TODO make the function to_ino to compile to .ino file format (takes over from to_c
+            #if the HTML file has <include> arduino </include> in it, the HTML code must be compiled to a .ino file, #include <arduino> is not written to the .ino file
+            if el_c == "#include <arduino>":
+                self.isArduino = True
+                continue
+
             if el_c:
                 c += el_c
 
         return c
+
+    def isArduinoCode(self):
+        return self.isArduino
 
 
 compiler = Compiler()                       # Construct the compiler

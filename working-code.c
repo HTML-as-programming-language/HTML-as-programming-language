@@ -1,4 +1,4 @@
-//- multi-line
+// multi-line
 // comments
 // work 
 int a = 5;
@@ -22,4 +22,4 @@ multiply(4, 5)
 // this is c code
 char thisIsAChar = 'b';
 
-//- assembly code in here: 
+// assembly code in here: 
