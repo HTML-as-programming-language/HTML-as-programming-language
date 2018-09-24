@@ -16,13 +16,13 @@ class Loop(Element):
 
         # var_from = 0 + self.attributes["from"]
         from_type = self.attributes.get("from", {}).get("type", "int")
-        from_value = self.attributes.get("from", {}).get("val", 0)
+        from_value = self.attributes.get("from", {}).get("val", 0)   # start from 0 if noting is given in 
 
         to_type = self.attributes.get("to", {}).get("type", "int")
-        to_value = self.attributes.get("to", {}).get("val", 0)
+        to_value = self.attributes.get("to", {}).get("val", -1)      # infinite loop if no "to" given in
 
         step_type = self.attributes.get("step", {}).get("type", "int")
-        step_value = self.attributes.get("step", {}).get("val", 1)
+        step_value = self.attributes.get("step", {}).get("val", 1)   # the default is i++
 
 
         c = "\n\nfor({} i={}; i<{}; i+={})".format(
