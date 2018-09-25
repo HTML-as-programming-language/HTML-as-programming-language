@@ -19,7 +19,7 @@ class HTMLParser:
     These methods are empty by default and can be implemented by a subclass
     """
 
-    def feed(self, filepath):
+    def feed(self, filepath, handler):
         """
         call this to start reading a HTML file
         :param filepath: for example: "../working-code.html"
@@ -42,7 +42,7 @@ class HTMLParser:
 
             if tagname == "!--":
                 # woo its a comment
-                self.handle_comment(tag[4:][:-3], start_line)
+                handler.handle_comment(tag[4:][:-3], start_line)
                 continue
 
             data = tag.split(">")[1]
@@ -54,17 +54,17 @@ class HTMLParser:
                 tag = tag[:-1]
 
             if not is_closing_tag:
-                self.handle_starttag(tagname, self.__parse_attrs(tagname_and_attrs), start_line)
+                handler.handle_starttag(tagname, self.__parse_attrs(tagname_and_attrs), start_line)
             elif is_closing_tag:
-                self.handle_closingtag(tagname, start_line)
+                handler.handle_closingtag(tagname, start_line)
 
             if is_self_closing_tag:
-                self.handle_closingtag(tagname, start_line)
+                handler.handle_closingtag(tagname, start_line)
 
             if len(data) > 0 and not data.isspace():
-                self.handle_data(data, start_line)
+                handler.handle_data(data, start_line)
 
-        self.finish_parsing()
+        handler.finish_parsing()
 
     def __parse_attrs(self, tagname_and_attrs):
         """
@@ -153,17 +153,19 @@ class HTMLParser:
 
         return [html[i:j] for i,j in zip(split_at_indices, split_at_indices[1:]+[None])]
 
-    def handle_comment(self, comment_text, line):
-        pass
+    class Handler:
 
-    def handle_starttag(self, tagname, attrs, line):
-        pass
+        def handle_comment(self, comment_text, line):
+            pass
 
-    def handle_data(self, data, line):
-        pass
+        def handle_starttag(self, tagname, attrs, line):
+            pass
 
-    def handle_closingtag(self, tagname, line):
-        pass
+        def handle_data(self, data, line):
+            pass
 
-    def finish_parsing(self):
-        pass
+        def handle_closingtag(self, tagname, line):
+            pass
+
+        def finish_parsing(self):
+            pass

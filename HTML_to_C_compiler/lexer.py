@@ -12,11 +12,11 @@ from elements.Include import Include
 from html_parser import HTMLParser
 from utils import camel_case_to_hyphenated
 
-class Lexer(HTMLParser):
+
+class Lexer(HTMLParser.Handler):
     """
-    The Lexer extends the HTML parser and implements several methods
-    that will construct an element tree.
-    (more info about these methods in parser.py)
+    The Lexer handles data that is parsed by a HTMLParser
+    with this data the lexer will construct an element tree.
 
     The element tree can only contain elements listed in self.element_classes.
 
@@ -46,9 +46,6 @@ class Lexer(HTMLParser):
             Comment,     # <!-- this is a comment --> OR <comment text="this is a comment"/>
             Include
         ]
-
-    def get_elements(self):
-        return self.elements
 
     def handle_starttag(self, tagname, attrs, line):
         """
@@ -122,5 +119,5 @@ class Lexer(HTMLParser):
                 )
             )
 
-    def isArduinoCode(self):
+    def is_arduino_code(self):
         return self.isArduino
