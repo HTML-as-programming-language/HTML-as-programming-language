@@ -1,133 +1,32 @@
-from elements.assembly import Assembly
-from elements.assign import Assign
-from elements.boolean_elements import Truth, Lie
-from elements.c import C
-from elements.comment import Comment
-from elements.function import Def, Param
-from elements.function_call import FunctionCall
-from elements.return_element import Return
-from elements.var import Var
-from elements.loop import Loop
-from elements.Include import Include
-from html_parser.parser import HTMLParser
+from lexer import Lexer
 from utils import camel_case_to_hyphenated
 
 
-class Compiler(HTMLParser):
-    """
-    The compiler extends the HTML parser and implements several methods
-    that will construct an element tree.
-    (more info about these methods in parser.py)
+class Compiler():    # Secrely I am just a transpiler but don't tell onyone
 
-    The element tree can only contain elements listed in self.element_classes.
+    def __init__(self, uri):
+        self.isArduino = False          # geeft aan of de code moet worden gecompileerd naar een .ino bestand voor de Arduino
+                                        # TODO: Change to flag
 
-    Every element must have a to_c() method.
-    It should return the corresponding C code. (or None if it has no corresponding code)
+        lexer = Lexer()                 # TODO: the lexer now inherits from the parser. The Lexer should instead take in a parser
+        lexer.feed(uri)
+        lexed_elements = lexer.get_elements()   # TODO: check performance of throwing this around
+        c = self.to_c(lexed_elements)    
+        print(c)
 
-    For example:
-    (<var a=5/>).to_c()
-    should return:
-    "int a = 5;"
-    """
+                                                    # TODO: this is hardcoded
+        file = open("../working-code.c", "w")       # Write the C code to a file
+        file.write(c)
+        file.close()
 
-    def __init__(self):
-        self.current_element = None
-        self.elements = []
-        self.element_classes = [
-            Var,        # <var a=5/>
-            Truth,      # <truth>x</truth>
-            Lie,
-            Loop,
-            Assign,
-            C,
-            Assembly,
-            Def,        # <def functionname></def>
-            Param,
-            Return,
-            Comment,     # <!-- this is a comment --> OR <comment text="this is a comment"/>
-            Include
-        ]
-        self.isArduino = False #geeft aan of de code moet worden gecompileerd naar een .ino bestand voor de Arduino
 
-    def handle_starttag(self, tagname, attrs, line):
-        """
-        Create a new element and put it in the element tree
-        All future elements will be a child of this element UNTIL handle_closingtag() is called
-        """
-        new_element = self.new_element_by_tagname(tagname)
-        new_element.tagname = tagname
-        new_element.attributes = attrs
-        new_element.line = line
-        if self.current_element:
-            self.current_element.children.append(new_element)
-            new_element.parent = self.current_element
-        else:
-            self.elements.append(new_element)
-
-        self.current_element = new_element
-
-    def handle_data(self, data, line):
-        if self.current_element:
-            if self.current_element.data:
-                self.current_element.data += data
-            else:
-                self.current_element.data = data
-
-    def handle_closingtag(self, tagname, line):
-        """
-        End of element found.
-        self.current_element = self.current_element.parent
-        """
-        if self.current_element and tagname == self.current_element.tagname:
-            self.current_element = self.current_element.parent
-        elif self.current_element:
-            raise Exception(
-                "Expected closing tag: </{}>\nGot: </{}> on line {}"
-                    .format(self.current_element.tagname, tagname, line)
-            )
-        else:
-            raise Exception("Unexpected closing tag </{}> on line {}".format(tagname, line))
-
-    def handle_comment(self, comment_text, line):
-        self.handle_starttag("comment", {"text": comment_text}, line)
-        self.handle_closingtag("comment", line)
-
-    def new_element_by_tagname(self, tagname):
-        """
-        Creates an new element based on the tagname.
-        tagname 'var' will return Var()
-        tagname 'def' will return Def()
-        tagname 'this-is-a-function-call' is not a known element so it will return FunctionCall()
-        """
-        for el in self.element_classes:
-            if camel_case_to_hyphenated(el.__name__) == tagname:
-                return el()
-        # no element found so assume its a function call:
-        return FunctionCall()
-
-    def finish_parsing(self):
-        """
-        Called when reading the HTML file is done.
-
-        If there is still an open element (self.current_element != None)
-        it means that there's an unclosed element somewhere in the file
-        """
-        if self.current_element:
-            raise Exception(
-                "Unclosed element <{}> on line {}\nDid you mean <{} ...attributes... /> ?".format(
-                    self.current_element.tagname,
-                    self.current_element.line,
-                    self.current_element.tagname
-                )
-            )
-
-    def to_c(self):
+    def to_c(self, lexed_elements):
         """
         Will return C code based on the Element tree
         """
 
         c = ""
-        for el in self.elements:
+        for el in lexed_elements:
             el_c = el.to_c()
 
             #TODO make the function to_ino to compile to .ino file format (takes over from to_c
@@ -141,14 +40,22 @@ class Compiler(HTMLParser):
 
         return c
 
-    def isArduinoCode(self):
-        return self.isArduino
 
-compiler = Compiler()                       # Construct the compiler
-compiler.feed("../working-code.html")       # Feed a HTML file to the compiler
-c = compiler.to_c()                         # Get the C code
-print(c)
 
-file = open("../working-code.c", "w")       # Write the C code to a file
-file.write(c)
-file.close()
+
+
+
+compiler = Compiler("../working-code.html")   # Construct the compiler
+
+
+
+
+
+
+# TODO: litle commandline program that gets flags from the user
+
+# compile to C
+# compile to assembly
+
+# compile and run
+# compile and print result in commandline

@@ -19,11 +19,11 @@ int multiplyPoep(int a, int b) {
 multiply(4, 5)
 
 
-for(int i=0; i<=5; i+=1) {
+for(int i=0; i<5; i+=1) {
 }
 
 
-for(int i=2; i<=5; i+=2) {
+for(int i=2; i<5; i+=2) {
 }
 
 
