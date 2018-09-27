@@ -4,7 +4,7 @@ import re
 class HTMLParser:
     """
     The HTML parser reads the HTML file that is given in feed()
-    While it reads the HTML file it will call several methods:
+    While it reads the HTML file it will call several methods of the handler:
 
         - handle_starttag() when it encounters a start-tag like <var a=5>
 
@@ -15,9 +15,24 @@ class HTMLParser:
         - handle_comment() when it encounters a comment like <!-- hello -->
 
         - finish_parsing() when it is done reading the file
-
-    These methods are empty by default and can be implemented by a subclass
     """
+
+    class Handler:
+
+        def handle_comment(self, comment_text, line):
+            pass
+
+        def handle_starttag(self, tagname, attrs, line):
+            pass
+
+        def handle_data(self, data, line):
+            pass
+
+        def handle_closingtag(self, tagname, line):
+            pass
+
+        def finish_parsing(self):
+            pass
 
     def feed(self, filepath, handler):
         """
@@ -27,7 +42,7 @@ class HTMLParser:
 
         html = open(filepath).read()
 
-        tags = self.__split_html_by_tags(html)
+        tags = self.__split_html_by_tags__(html)
         line = re.split(".+", html)[0].count("\n")  # number of empty lines at top of file
         for tag in tags:
             start_line = line + 1
@@ -54,7 +69,7 @@ class HTMLParser:
                 tag = tag[:-1]
 
             if not is_closing_tag:
-                handler.handle_starttag(tagname, self.__parse_attrs(tagname_and_attrs), start_line)
+                handler.handle_starttag(tagname, self.__parse_attrs__(tagname_and_attrs), start_line)
             elif is_closing_tag:
                 handler.handle_closingtag(tagname, start_line)
 
@@ -66,7 +81,7 @@ class HTMLParser:
 
         handler.finish_parsing()
 
-    def __parse_attrs(self, tagname_and_attrs):
+    def __parse_attrs__(self, tagname_and_attrs):
         """
         This function will parse the attributes of a tag
         (this function should only be used by the HTML parser itself, aka 'private' in java)
@@ -120,7 +135,7 @@ class HTMLParser:
             }
         return attrs
 
-    def __split_html_by_tags(self, html):
+    def __split_html_by_tags__(self, html):
         in_comment = False
         in_string = False
         string_quotes = '"'
@@ -152,20 +167,3 @@ class HTMLParser:
                     split_at_indices.append(i)
 
         return [html[i:j] for i,j in zip(split_at_indices, split_at_indices[1:]+[None])]
-
-    class Handler:
-
-        def handle_comment(self, comment_text, line):
-            pass
-
-        def handle_starttag(self, tagname, attrs, line):
-            pass
-
-        def handle_data(self, data, line):
-            pass
-
-        def handle_closingtag(self, tagname, line):
-            pass
-
-        def finish_parsing(self):
-            pass

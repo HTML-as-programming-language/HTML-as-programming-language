@@ -1,3 +1,4 @@
+import os
 import re
 
 
@@ -30,3 +31,15 @@ def indent(text, tabs):
     """
     return "".join("{}{}\n".format("    " * tabs, x) for x in text.split("\n"))
 
+
+def file_dir(filepath):
+    filepath = os.path.abspath(filepath)
+    reversed = filepath[::-1]
+    splitted = re.split("\/|\\\\", reversed, 1)
+    if len(splitted) == 1:
+        return "./"
+    return splitted[1][::-1] + "/"
+
+
+def filename(filepath):
+    return re.split("\/|\\\\", filepath[::-1], 1)[0][::-1]

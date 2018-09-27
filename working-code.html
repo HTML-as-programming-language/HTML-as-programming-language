@@ -9,9 +9,8 @@ work -->
 <var a=5/>
 a
 <var b=6/>
-<var een-string="po
-ep"/>
-
+<var een-string="multi
+line string"/>
 
 <var een-char='b'/>
 
@@ -21,57 +20,55 @@ ep"/>
 
 <var c=a type="int"/>
 
+<var b=&a type="int"/>
+
 <assign a>100</assign>
 
-<logic if="a() < 4">
+<expression x="a > 50">
+    <ya-really>
+        <!-- if-code here -->
+    </ya-really>
 
-    <assign a>50 < 40</assign>
+    <maybe x="a < 10">
+        <!-- else-if code here -->
+    </maybe>
 
-    <var x="a == 5 ? 10 : 20" type="int"/>
+    <no-wai>
+        <!-- else code here -->
+    </no-wai>
+</expression>
 
-    <hello>
-        <param>1 == 1 ? "hoi" : "doei"</param>
-    </hello>
+<break/>
+<!-- OR? -->
+<pls-stop/>
 
-    <!-- a = multiply(4, 20); -->
-    <assign a>
-        <multiply>
-            <param>4</param>
-            <param>20</param>
-        </multiply>
-    </assign>
-    
-    
-    a + b
-</logic>
+<continue/>
+<!-- OR? -->
+<next-pls/>
 
-<def multiply-poep returns="int">
+<def multiply returns="int">
     <param a type="int"/>
-    <param b type="int"/>
+    <!-- <param b default=6/> -->
 
     <return>a*b</return>
+    <now-its-your-problem>a*b</now-its-your-problem>
 </def>
+
+<!-- 2 ways of including a file: -->
+<script type="text/html" src="./include-this-file.html"/>
+
+<link type="text/html" href="./include-this-file.html"/>
+
 
 <multiply>
     <param>4</param>
     <param>5</param>
 </multiply>
-
-
-<loop to=5>
-
-</loop>
-
-<loop from=2 to=5 step=2>
-
-</loop>
-
-
+ 
 <c>
 
     // this is c code
     char thisIsAChar = 'b';
-
 
 </c>
 

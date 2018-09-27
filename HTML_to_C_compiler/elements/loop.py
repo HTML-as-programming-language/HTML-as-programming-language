@@ -1,5 +1,4 @@
 from elements.element import Element
-from utils import hyphenated_to_camel_case, indent
 
 
 class Loop(Element):
@@ -24,19 +23,12 @@ class Loop(Element):
         step_type = self.attributes.get("step", {}).get("type", "int")
         step_value = self.attributes.get("step", {}).get("val", 1)   # the default is i++
 
-
         c = "\n\nfor({} i={}; i<{}; i+={})".format(
             from_type, from_value,
             to_value,
             step_value
         ) + " {\n"
 
-        for el in self.children:
-            if el.tagname == "param":
-                continue
-            el_c = el.to_c()
-            if el_c:
-                c += indent(el_c, 1)
-
+        c += self.children_to_c()
         c += "}\n"
         return c

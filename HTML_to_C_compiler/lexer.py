@@ -8,7 +8,7 @@ from elements.function_call import FunctionCall
 from elements.return_element import Return
 from elements.var import Var
 from elements.loop import Loop
-from elements.Include import Include
+from elements.link import Link, Script
 from html_parser import HTMLParser
 from utils import camel_case_to_hyphenated
 
@@ -29,7 +29,9 @@ class Lexer(HTMLParser.Handler):
     "int a = 5;"
     """
 
-    def __init__(self):
+    def __init__(self, dir, filename):
+        self.dir = dir
+        self.filename = filename
         self.current_element = None
         self.elements = []
         self.element_classes = [
@@ -43,8 +45,9 @@ class Lexer(HTMLParser.Handler):
             Def,        # <def functionname></def>
             Param,
             Return,
-            Comment,     # <!-- this is a comment --> OR <comment text="this is a comment"/>
-            Include
+            Comment,    # <!-- this is a comment --> OR <comment text="this is a comment"/>
+            Link,       # <link type="text/html" href="./include-this-file.html"/>
+            Script      # <script type="text/html" src="./include-this-file.html"/>
         ]
 
     def handle_starttag(self, tagname, attrs, line):
@@ -55,6 +58,8 @@ class Lexer(HTMLParser.Handler):
         new_element = self.new_element_by_tagname(tagname)
         new_element.tagname = tagname
         new_element.attributes = attrs
+        new_element.dir = self.dir
+        new_element.filename = self.filename
         new_element.line = line
         if self.current_element:
             self.current_element.children.append(new_element)
@@ -118,6 +123,3 @@ class Lexer(HTMLParser.Handler):
                     self.current_element.tagname
                 )
             )
-
-    def is_arduino_code(self):
-        return self.isArduino

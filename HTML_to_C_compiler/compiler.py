@@ -1,16 +1,22 @@
+import utils
 from html_parser import HTMLParser
 from lexer import Lexer
+from linker import Linker
 
 
-class Compiler():    # Secrely I am just a transpiler but don't tell onyone
+class Compiler:
 
-    def __init__(self, uri):
-        lexer = Lexer()
+    def __init__(self, filepath):
+        lexer = Lexer(utils.file_dir(filepath), utils.filename(filepath))
         parser = HTMLParser()
 
-        parser.feed(uri, lexer)
-        lexed_elements = lexer.elements
-        c = self.to_c(lexed_elements)    
+        parser.feed(filepath, lexer)
+        element_tree = lexer.elements
+
+        linker = Linker(element_tree, parser)
+        linker.link_external_files()
+
+        c = self.to_c(element_tree)
         print(c)
                                                     # TODO: this is hardcoded
         file = open("../working-code.c", "w")       # Write the C code to a file
@@ -30,6 +36,8 @@ class Compiler():    # Secrely I am just a transpiler but don't tell onyone
 
 
 compiler = Compiler("../working-code.html")   # Construct the compiler
+
+
 # TODO: litle commandline program that gets flags from the user
 
 # compile to C
