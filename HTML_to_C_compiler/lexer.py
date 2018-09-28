@@ -8,15 +8,15 @@ from elements.function_call import FunctionCall
 from elements.return_element import Return
 from elements.var import Var
 from elements.loop import Loop
-from elements.Include import Include
+from elements.link import Link, Script
 from html_parser import HTMLParser
 from utils import camel_case_to_hyphenated
 
-class Lexer(HTMLParser):
+
+class Lexer(HTMLParser.Handler):
     """
-    The Lexer extends the HTML parser and implements several methods
-    that will construct an element tree.
-    (more info about these methods in parser.py)
+    The Lexer handles data that is parsed by a HTMLParser
+    with this data the lexer will construct an element tree.
 
     The element tree can only contain elements listed in self.element_classes.
 
@@ -29,7 +29,9 @@ class Lexer(HTMLParser):
     "int a = 5;"
     """
 
-    def __init__(self):
+    def __init__(self, dir, filename):
+        self.dir = dir
+        self.filename = filename
         self.current_element = None
         self.elements = []
         self.element_classes = [
@@ -43,12 +45,10 @@ class Lexer(HTMLParser):
             Def,        # <def functionname></def>
             Param,
             Return,
-            Comment,     # <!-- this is a comment --> OR <comment text="this is a comment"/>
-            Include
+            Comment,    # <!-- this is a comment --> OR <comment text="this is a comment"/>
+            Link,       # <link type="text/html" href="./include-this-file.html"/>
+            Script      # <script type="text/html" src="./include-this-file.html"/>
         ]
-
-    def get_elements(self):
-        return self.elements
 
     def handle_starttag(self, tagname, attrs, line):
         """
@@ -58,6 +58,8 @@ class Lexer(HTMLParser):
         new_element = self.new_element_by_tagname(tagname)
         new_element.tagname = tagname
         new_element.attributes = attrs
+        new_element.dir = self.dir
+        new_element.filename = self.filename
         new_element.line = line
         if self.current_element:
             self.current_element.children.append(new_element)
@@ -121,6 +123,3 @@ class Lexer(HTMLParser):
                     self.current_element.tagname
                 )
             )
-
-    def isArduinoCode(self):
-        return self.isArduino

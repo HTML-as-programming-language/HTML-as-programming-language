@@ -15,7 +15,7 @@ class Param(Element):
     def get_type(self):
         typee = self.attributes.get("type", {}).get("val")
         if not typee:
-            raise Exception("Param without a type on line " + self.line)
+            raise Exception("Param without a type on line {}".format(self.line))
         return typee
 
 
@@ -52,12 +52,6 @@ class Def(Element):
             ", ".join(param for param in params)
         ) + " {\n"
 
-        for el in self.children:
-            if el.tagname == "param":
-                continue
-            el_c = el.to_c()
-            if el_c:
-                c += indent(el_c, 1)
-
+        c += self.children_to_c()
         c += "}\n"
         return c
