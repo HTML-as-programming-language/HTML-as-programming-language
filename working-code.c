@@ -3,19 +3,31 @@
 // work 
 int a = 5;
 int b = 6;
-String eenString = "poep";
+String eenString = "multilinestring";
 char eenChar = 'b';
 bool timoIsAnAsshole = true;
 bool hilkoIsAnAsshole = false;
 int c = a;
+int b = &a;
 a = 100;
-logic()
+expression()
+break()
+// OR? 
+pls-stop()
+continue()
+// OR? 
+next-pls()
 
 
-int multiplyPoep(int a, int b) {
-    return a*b;
-    
+int multiply(int a) {
+// <param b default=6/> 
+return a*b;
+now-its-your-problem()
 }
+// 2 ways of including a file: 
+int includedVar = 4;
+// the following import will be ignored because 'working-code.html' imported this file: 
+// if it's not ignored an infinite loop of imports will occur 
 multiply(4, 5)
 
 
