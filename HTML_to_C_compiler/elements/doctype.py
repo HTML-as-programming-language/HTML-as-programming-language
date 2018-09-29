@@ -8,4 +8,4 @@ class Doctype(Element):
     """
 
     def to_c(self):
-        return "Hello World" #TODO niet dit
+        return self.attributes.get("text", "") + "\n" #TODO niet dit

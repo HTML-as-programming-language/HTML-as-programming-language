@@ -97,6 +97,10 @@ class Lexer(HTMLParser.Handler):
         self.handle_starttag("comment", {"text": comment_text}, line)
         self.handle_closingtag("comment", line)
 
+    def handle_doctype(self, doctype, line):
+        self.handle_starttag("doctype", {"text": doctype}, line)
+        self.handle_closingtag("doctype", line)
+
     def new_element_by_tagname(self, tagname):
         """
         Creates an new element based on the tagname.

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 // multi-line
 // comments
 // work 
