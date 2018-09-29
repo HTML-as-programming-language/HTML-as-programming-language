@@ -1,4 +1,5 @@
 from elements.element import Element
+from utils import includeFile
 
 
 class Doctype(Element):
@@ -8,4 +9,7 @@ class Doctype(Element):
     """
 
     def to_c(self):
-        return self.attributes.get("text", "") + "\n" #TODO niet dit
+        if self.attributes.get("text", "") == "<!DOCTYPE arduino>":
+            return includeFile("libraries/arduinoLib.c") + "\n"
+        else:
+            return self.attributes.get("text", "") + "\n" #TODO niet dit

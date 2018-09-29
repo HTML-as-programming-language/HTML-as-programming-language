@@ -43,3 +43,10 @@ def file_dir(filepath):
 
 def filename(filepath):
     return re.split("\/|\\\\", filepath[::-1], 1)[0][::-1]
+
+#returns the content of a file
+def includeFile(filepath):
+    file = open(filepath, "r")
+    content = file.read()
+    file.close()
+    return content
