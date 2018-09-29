@@ -9,6 +9,7 @@ from elements.return_element import Return
 from elements.var import Var
 from elements.loop import Loop
 from elements.link import Link, Script
+from elements.doctype import Doctype
 from html_parser import HTMLParser
 from utils import camel_case_to_hyphenated
 
@@ -47,7 +48,8 @@ class Lexer(HTMLParser.Handler):
             Return,
             Comment,    # <!-- this is a comment --> OR <comment text="this is a comment"/>
             Link,       # <link type="text/html" href="./include-this-file.html"/>
-            Script      # <script type="text/html" src="./include-this-file.html"/>
+            Script,      # <script type="text/html" src="./include-this-file.html"/>
+            Doctype
         ]
 
     def handle_starttag(self, tagname, attrs, line):
@@ -94,6 +96,10 @@ class Lexer(HTMLParser.Handler):
     def handle_comment(self, comment_text, line):
         self.handle_starttag("comment", {"text": comment_text}, line)
         self.handle_closingtag("comment", line)
+
+    def handle_doctype(self, doctype, line):
+        self.handle_starttag("doctype", {"text": doctype}, line)
+        self.handle_closingtag("doctype", line)
 
     def new_element_by_tagname(self, tagname):
         """

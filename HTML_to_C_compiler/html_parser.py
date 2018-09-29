@@ -34,6 +34,9 @@ class HTMLParser:
         def finish_parsing(self):
             pass
 
+        def handle_doctype(self, doctype, line):
+            pass
+
     def feed(self, filepath, handler):
         """
         call this to start reading a HTML file
@@ -58,6 +61,11 @@ class HTMLParser:
             if tagname == "!--":
                 # woo its a comment
                 handler.handle_comment(tag[4:][:-3], start_line)
+                continue
+
+            if tagname == "!DOCTYPE":
+                #The great rule of life is to have no schemes but one unalterable purpose
+                handler.handle_doctype(tag, start_line)
                 continue
 
             data = tag.split(">")[1]
