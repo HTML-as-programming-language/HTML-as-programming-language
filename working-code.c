@@ -21,15 +21,22 @@ continue()
 next-pls()
 
 
-int multiply(int a) {
-// <param b default=6/> 
+int multiply(int a, int b) {
 return a*b;
+}
+
+
+int addTo(int a, int b) {
 now-its-your-problem()
+// return 
 }
 // 2 ways of including a file: 
 int includedVar = 4;
 // the following import will be ignored because 'working-code.html' imported this file: 
 // if it's not ignored an infinite loop of imports will occur 
+// check to see that files arent included twice 
+int includedVar2 = 4;
+// this comment is from include-this-file-too.html 
 multiply(4, 5)
 
 

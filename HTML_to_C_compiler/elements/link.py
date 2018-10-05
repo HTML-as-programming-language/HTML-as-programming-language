@@ -8,6 +8,7 @@ class Link(Element):
     """
 
     def to_c(self):
+        print("Hello World from a Link\n") #for debugging purposes
         return self.children_to_c()
 
 
