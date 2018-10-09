@@ -29,4 +29,10 @@ class Expression(Element):
     """
 
     def to_c(self):
-        pass
+        print (str(self.attributes))
+        x = ""
+        for item in self.children:
+            x += (item.to_c() + "\n")
+
+        return("if (" + self.attributes.get("text", "") + ") {\n" +
+               x + "}" + "\n")

@@ -12,7 +12,14 @@ bool hilkoIsAnAsshole = false;
 int c = a;
 int b = &a;
 a = 100;
-expression()
+if (a > 50) {
+ya-really()
+
+maybe()
+
+no-wai()
+
+}
 break()
 // OR? 
 pls-stop()
