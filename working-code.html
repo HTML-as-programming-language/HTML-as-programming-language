@@ -48,16 +48,24 @@ line string"/>
 
 <def multiply returns="int">
     <param a type="int"/>
-    <!-- <param b default=6/> -->
+    <param b type="int" default=6/>
 
     <return>a*b</return>
-    <now-its-your-problem>a*b</now-its-your-problem>
+</def>
+
+<def addTo returns="int">
+    <param a type="int"/>
+    <param b type="int" default=6/>
+
+
+    <now-its-your-problem>a+b</now-its-your-problem> <!-- return -->
 </def>
 
 <!-- 2 ways of including a file: -->
 <script type="text/html" src="./include-this-file.html"/>
-
+<!-- check to see that files arent included twice -->
 <link type="text/html" href="./include-this-file.html"/>
+<link type="text/html" href="./include-this-file-too.html"/>
 
 
 <multiply>
