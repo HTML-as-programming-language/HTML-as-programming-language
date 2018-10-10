@@ -29,7 +29,6 @@ class Expression(Element):
     """
 
     def to_c(self):
-        print (str(self.attributes))
         iftrues = ""
         elseifs = []
         iffalse = ""
@@ -42,9 +41,10 @@ class Expression(Element):
                 continue
             if (c == "maybe();\n"):
                 subelseif = "" #create empty string
+                subelseif += "else if(" + item.attributes['x']['val'] + ") {\n"
                 for child in item.children: #adds items to the else if field of the if statement
                     subelseif += (child.to_c()) #adds else if field to elseifs
-                elseifs.append(subelseif)
+                elseifs.append(subelseif) #add elseif to array to be written to if statement later
                 continue
 
             if (c == "ya-really();\n"):#if not part of else or else if field, add to if statement
@@ -54,7 +54,6 @@ class Expression(Element):
 
         lineToReturn = ("if (" + self.attributes.get("text", "") + ") {\n") + iftrues + " }\n" #build the if statement
         for item in elseifs: #write else if statement one by one
-            lineToReturn += "else if() {\n"
             lineToReturn += item
             lineToReturn += "}\n"
         if (iffalse != ""): #write the else statement

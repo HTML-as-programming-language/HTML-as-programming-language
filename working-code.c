@@ -15,7 +15,7 @@ a = 100;
 if (a > 50) {
 // if-code here 
  }
-else if() {
+else if(a<10) {
 // else-if code here 
 }
 else {

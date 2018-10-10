@@ -104,7 +104,6 @@ class Lexer(HTMLParser.Handler):
         self.handle_closingtag("doctype", line)
 
     def handle_expression_start(self, condition, line):
-        print("handle_expression was called: " + condition)
         condition = condition.strip('x=') #trim the condition from x= and doublequotes
         condition = condition.strip('x =')
         condition = condition.replace('"', '')
