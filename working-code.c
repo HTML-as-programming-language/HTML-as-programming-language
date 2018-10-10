@@ -13,12 +13,13 @@ int c = a;
 int b = &a;
 a = 100;
 if (a > 50) {
-ya-really();
-
-maybe();
-
-no-wai();
-
+// if-code here 
+ }
+else if() {
+// else-if code here 
+}
+else {
+// else code here 
 }
 break();
 // OR? 
