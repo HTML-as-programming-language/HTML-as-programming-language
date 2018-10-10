@@ -19,7 +19,15 @@ class FunctionCall(Element):
             if el.tagname == "param":
                 params.append(el.data.strip())
 
-        return "{}({})\n".format(  # for example: multiply(4, 5)
+        lineToReturn = "{}({});\n".format(  # for example: multiply(4, 5)
+            self.tagname,
+            ", ".join([param for param in params]))
+
+
+        if not (isinstance(self.parent, FunctionCall)): #if this functioncall is not a child of a functioncall, add a semicolon (;)
+            lineToReturn += ";"
+
+        return "{}({});\n".format(  # for example: multiply(4, 5)
             self.tagname,
             ", ".join([param for param in params])
         )

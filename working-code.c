@@ -13,19 +13,19 @@ int c = a;
 int b = &a;
 a = 100;
 if (a > 50) {
-ya-really()
+ya-really();
 
-maybe()
+maybe();
 
-no-wai()
+no-wai();
 
 }
-break()
+break();
 // OR? 
-pls-stop()
-continue()
+pls-stop();
+continue();
 // OR? 
-next-pls()
+next-pls();
 
 
 int multiply(int a, int b) {
@@ -34,7 +34,7 @@ return a*b;
 
 
 int addTo(int a, int b) {
-now-its-your-problem()
+now-its-your-problem();
 // return 
 }
 // 2 ways of including a file: 
@@ -44,7 +44,7 @@ int includedVar = 4;
 // check to see that files arent included twice 
 int includedVar2 = 4;
 // this comment is from include-this-file-too.html 
-multiply(4, 5)
+multiply(4, 5);
 
 
 for(int i=0; i<5; i+=1) {
