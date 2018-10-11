@@ -52,6 +52,6 @@ class Def(Element):
             ", ".join(param for param in params)
         ) + " {\n"
 
-        c += self.children_to_c()
+        c += indent(self.children_to_c(), 1)
         c += "}\n"
         return c
