@@ -10,7 +10,7 @@ from elements.var import Var
 from elements.loop import Loop
 from elements.link import Link, Script
 from elements.doctype import Doctype
-from elements.expression import Expression
+from elements.expression import Expression, YaReally, Maybe, NoWai
 from html_parser import HTMLParser
 from utils import camel_case_to_hyphenated
 
@@ -51,7 +51,7 @@ class Lexer(HTMLParser.Handler):
             Link,       # <link type="text/html" href="./include-this-file.html"/>
             Script,      # <script type="text/html" src="./include-this-file.html"/>
             Doctype,
-            Expression
+            Expression, YaReally, Maybe, NoWai      # if/else if/else functionality
         ]
 
     def handle_starttag(self, tagname, attrs, line):
@@ -102,13 +102,6 @@ class Lexer(HTMLParser.Handler):
     def handle_doctype(self, doctype, line):
         self.handle_starttag("doctype", {"text": doctype}, line)
         self.handle_closingtag("doctype", line)
-
-    def handle_expression_start(self, condition, line):
-        condition = condition.strip('x=') #trim the condition from x= and doublequotes
-        condition = condition.strip('x =')
-        condition = condition.replace('"', '')
-        condition.strip()
-        self.handle_starttag("expression", {"text": condition}, line)
 
     def new_element_by_tagname(self, tagname):
         """

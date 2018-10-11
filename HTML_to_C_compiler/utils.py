@@ -44,6 +44,39 @@ def file_dir(filepath):
 def filename(filepath):
     return re.split("\/|\\\\", filepath[::-1], 1)[0][::-1]
 
+
+def split_preserve_substrings(string, separator):
+    splitted = []
+    in_sub_string = False
+    opening_char = None
+    length = len(string)
+    sep_len = len(separator)
+
+    prev_i = 0
+    for i in range(len(string)):
+        char = string[i]
+        is_last = i == length - 1
+        if char == "'" or char == '"':
+            if char == opening_char:
+                in_sub_string = False
+            else:
+                in_sub_string = True
+                opening_char = char
+
+        if in_sub_string and not is_last:
+            continue
+
+        found_sep = string[i:i+sep_len] == separator
+        if found_sep or is_last:
+            splitted.append(
+                string[
+                    (prev_i + sep_len if prev_i > 0 else 0):(i if found_sep else i + 1)
+                ]
+            )
+            prev_i = i
+    return splitted
+
+
 #returns the content of a file
 def includeFile(filepath):
     file = open(filepath, "r")

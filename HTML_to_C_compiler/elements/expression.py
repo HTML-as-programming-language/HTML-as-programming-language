@@ -1,62 +1,94 @@
 from elements.element import Element
+from utils import indent
 
 
 class Expression(Element):
     """"
-    HTML: <expression x="a > 50">
-    <ya-really>
-        <!-- if-code here -->
-    </ya-really>
+    HTML:
+    <expression x="a > 50">
+        <ya-really>
+            <!-- if-code here -->
+        </ya-really>
 
-    <maybe x="a < 10">
-        <!-- else-if code here -->
-    </maybe>
+        <maybe x="a < 10">
+            <!-- else-if code here -->
+        </maybe>
 
-    <no-wai>
-        <!-- else code here -->
-    </no-wai>
+        <no-wai>
+            <!-- else code here -->
+        </no-wai>
     </expression>
 
-    C: if (a > 50){
-    //code goes here
+    C:
+    if (a > 50){
+        //code goes here
     }
     else if (a < 10) {
-    //else-if code here
+        //else-if code here
     }
     else {
-    //else code here
+        //else code here
     }
     """
 
     def to_c(self):
-        iftrues = ""
-        elseifs = []
-        iffalse = ""
 
-        for item in self.children:
-            c = item.to_c()
-            if (c == "no-wai();\n"):
-                for child in item.children: #adds items to the else field of the if statement
-                    iffalse += (child.to_c())
+        x = self.attributes.get("x", "").get("val")
+        if not x:
+            raise Exception("Expression element found without x-attribute on line {}".format(self.line))
+        # 'if' body:
+        c = "if ({})".format(x) + " {\n"
+        for child in self.children:
+            if not isinstance(child, YaReally):
                 continue
-            if (c == "maybe();\n"):
-                subelseif = "" #create empty string
-                subelseif += "else if(" + item.attributes['x']['val'] + ") {\n"
-                for child in item.children: #adds items to the else if field of the if statement
-                    subelseif += (child.to_c()) #adds else if field to elseifs
-                elseifs.append(subelseif) #add elseif to array to be written to if statement later
-                continue
+            c += indent(child.to_c(), 1)
+        c += "\n}"
 
-            if (c == "ya-really();\n"):#if not part of else or else if field, add to if statement
-                for child in item.children:  # adds items to the if state of the if statement
-                    iftrues += (child.to_c())
-                continue
+        # 'else-if' bodies:
+        c += "\n".join(
+            [child.to_c() for child in self.children if isinstance(child, Maybe)]
+        )
 
-        lineToReturn = ("if (" + self.attributes.get("text", "") + ") {\n") + iftrues + " }\n" #build the if statement
-        for item in elseifs: #write else if statement one by one
-            lineToReturn += item
-            lineToReturn += "}\n"
-        if (iffalse != ""): #write the else statement
-            lineToReturn += "else {\n" + iffalse + "}\n"
+        # 'else' body:
+        c += "\n".join(
+            [child.to_c() for child in self.children if isinstance(child, NoWai)]
+            [:1]  # max 1 else-body
+        )
+        return c
 
-        return(lineToReturn)
+
+class ExpressionChild(Element):
+
+    def check(self):
+        if not isinstance(self.parent, Expression):
+            raise Exception(
+                "{} element found outside of expression element on line {}".format(self.tagname, self.line)
+            )
+
+
+class YaReally(ExpressionChild):
+
+    def to_c(self):
+        self.check()
+        return self.children_to_c()
+
+
+class Maybe(ExpressionChild):
+
+    def to_c(self):
+        self.check()
+        x = self.attributes.get("x", "").get("val")
+        if not x:
+            raise Exception("Maybe element found without x-attribute on line {}".format(self.line))
+        return " else if ({})".format(x) + " {\n" + (
+
+            indent(self.children_to_c(), 1)
+
+        ) + "}"
+
+
+class NoWai(ExpressionChild):
+
+    def to_c(self):
+        self.check()
+        return " else {\n" + indent(self.children_to_c(), 1) + "}\n"

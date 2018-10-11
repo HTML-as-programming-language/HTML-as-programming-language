@@ -5,21 +5,23 @@ en moet later worden vervangen door C code
 // work 
 int a = 5;
 int b = 6;
-String eenString = "multilinestring";
+String eenString = "multi\nline string";
 char eenChar = 'b';
 bool timoIsAnAsshole = true;
 bool hilkoIsAnAsshole = false;
 int c = a;
 int b = &a;
 a = 100;
-if (a > 50) {
-// if-code here 
- }
-else if(a<10) {
-// else-if code here 
-}
-else {
-// else code here 
+if (a >= 50 && a <= 3 && a != 2) {
+    // if-code here 
+    
+
+} else if (a < 10) {
+    // else-if code here 
+    
+} else {
+    // else code here 
+    
 }
 break();
 // OR? 

@@ -1,5 +1,7 @@
 import re
 
+from utils import split_preserve_substrings
+
 
 class HTMLParser:
     """
@@ -58,21 +60,14 @@ class HTMLParser:
             if tag.isspace() or len(tag) == 0:
                 continue
 
-            tagname_and_attrs = tag[1:].split(">")[0]
-            tagname = tagname_and_attrs.split(" ")[0].replace("/", "")
+            tagname_and_attrs = split_preserve_substrings(tag[1:], ">")[0]
+            tagname = split_preserve_substrings(tagname_and_attrs, " ")[0].replace("/", "")
 
-            if tagname == "!--":
-                # woo its a comment
+            if tagname == "!--":    # found a comment
                 handler.handle_comment(tag[4:][:-3], start_line)
                 continue
-
-            if tagname == "!DOCTYPE":
-                #The great rule of life is to have no schemes but one unalterable purpose
+            elif tagname.lower() == "!doctype":     # found a doctype-tag
                 handler.handle_doctype(tag, start_line)
-                continue
-
-            if tagname == "expression" and tag != "</expression>":
-                handler.handle_expression_start(tag[11:][:-1], start_line)
                 continue
 
             data = tag.split(">")[1]
@@ -108,24 +103,18 @@ class HTMLParser:
         if tagname_and_attrs.endswith("/"):
             tagname_and_attrs = tagname_and_attrs[:-1]
 
-        attr_strings = re.split(" |\n", tagname_and_attrs)
+        attr_strings = "\n".join(split_preserve_substrings(tagname_and_attrs, " "))
+        attr_strings = split_preserve_substrings(attr_strings, "\n")
         del attr_strings[0]     # the tagname is not an attribute
 
         if len(attr_strings) == 0:
             return {}
 
-        # combine multi-line strings into 1 attribute:
-        for i in range(len(attr_strings) - 1, 0, -1):
-            attr_str = attr_strings[i]
-            if attr_str.count('"') == 1:
-                del attr_strings[i]
-                attr_strings[i - 1] += attr_str
-
         attrs = {}
         for attr_str in attr_strings:
-            splitted = attr_str.split("=")
+            splitted = attr_str.split("=", maxsplit=1)
             key = splitted[0]
-            val = splitted[1] if len(splitted) == 2 else None
+            val = splitted[1].replace("\n", "\\n") if len(splitted) == 2 else None
 
             if val is None:
                 type = None
