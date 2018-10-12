@@ -7,6 +7,8 @@ import {
 	ServerOptions,
 } from 'vscode-languageclient';
 
+let client: LanguageClient;
+
 // this method is called when the extension is activated
 export function activate(context: vscode.ExtensionContext) {
 
@@ -31,7 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.concat([
-        langServer,
+        client.start(),
         disposable
     ]);
 
@@ -39,17 +41,19 @@ export function activate(context: vscode.ExtensionContext) {
 
 // this method is called when the extension is deactivated
 export function deactivate() {
+    if (client)
+        client.stop();
 }
 
-function startLangServer(dir: string): vscode.Disposable {
+function startLangServer(dir: string) {
 
     const serverOptions: ServerOptions = {
         command: "python",
         args: [dir + (dir.endsWith("/") ? "" : "/") + "lang_server.py"]
 	};
 	const clientOptions: LanguageClientOptions = {
-		documentSelector: ["html"]
+		documentSelector: ["html", "plaintext"]
 	}
 
-    return new LanguageClient("htmlc", serverOptions, clientOptions).start();
+    client = new LanguageClient("htmlc", serverOptions, clientOptions);
 }

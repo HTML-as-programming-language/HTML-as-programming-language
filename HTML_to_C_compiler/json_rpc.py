@@ -23,14 +23,6 @@ class JsonRpcServer:
             }
         }
         """
-        self.send({
-            "id": "hoi",
-            "method": "window/showMessage",
-            "params": {
-                "type": 3,
-                "message": "hoi"
-            }
-        })
         buffer = ""
         content_len = 0
         while True:
@@ -44,14 +36,15 @@ class JsonRpcServer:
 
             else:
                 if len(buffer) == content_len:
-                    # self.handle(json.loads(buffer))
+                    self.handle(json.loads(buffer))
                     content_len = 0
                     buffer = ""
 
     def handle(self, request):
-        method_name = camel_case_to_snake(request["method"].replace("/", "__"))
-        method = self.__getattribute__(method_name)
-        method(request)
+        if "method" in request:
+            method_name = camel_case_to_snake(request["method"].replace("/", "__"))
+            if method_name in dir(self):
+                self.__getattribute__(method_name)(request)
 
     def respond(self, request, response):
         self.send({
@@ -68,5 +61,5 @@ class JsonRpcServer:
                 .format(len(content), content)
         )
 
-        sys.stdout.buffer.write(bytearray(s + "\n", "utf-8"))
+        sys.stdout.buffer.write(bytearray(s, "utf-8"))
         sys.stdout.flush()
