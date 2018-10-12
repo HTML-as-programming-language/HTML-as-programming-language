@@ -1,18 +1,16 @@
-from elements.assembly import Assembly
-from elements.assign import Assign
-from elements.boolean_elements import Truth, Lie
-from elements.c import C
-from elements.comment import Comment
-from elements.function import Def, Param
-from elements.function_call import FunctionCall
-from elements.return_element import Return
-from elements.var import Var
-from elements.loop import Loop
-from elements.link import Link, Script
-from elements.doctype import Doctype
-from elements.expression import Expression, YaReally, Maybe, NoWai
-from html_parser import HTMLParser
-from utils import camel_case_to_hyphenated
+from htmlc.elements.assembly import Assembly
+from htmlc.elements.assign import Assign
+from htmlc.elements.boolean_elements import Truth, Lie
+from htmlc.elements.c import C
+from htmlc.elements.comment import Comment
+from htmlc.elements.doctype import Doctype
+from htmlc.elements.expression import Expression, YaReally, Maybe, NoWai
+from htmlc.elements.function import Def, Param
+from htmlc.elements.link import Link, Script
+from htmlc.elements.loop import Loop
+from htmlc.elements.return_element import Return
+from htmlc.elements.var import Var
+from htmlc.html_parser import HTMLParser
 
 
 class Lexer(HTMLParser.Handler):

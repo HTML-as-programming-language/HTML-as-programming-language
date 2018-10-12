@@ -1,7 +1,7 @@
 import os
 
-import utils
-from lexer import Lexer
+from htmlc import utils
+from htmlc.lexer import Lexer
 
 
 class Linker:

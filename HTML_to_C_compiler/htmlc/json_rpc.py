@@ -3,7 +3,7 @@ import sys
 import re
 import json
 
-from utils import camel_case_to_snake
+from htmlc.utils import camel_case_to_snake
 
 
 class JsonRpcServer:

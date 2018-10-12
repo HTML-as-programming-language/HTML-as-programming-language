@@ -1,5 +1,5 @@
-from elements.element import Element
-from utils import indent
+from htmlc.elements.element import Element
+from htmlc.utils import indent
 
 
 class Expression(Element):

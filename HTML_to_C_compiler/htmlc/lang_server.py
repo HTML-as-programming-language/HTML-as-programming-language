@@ -1,4 +1,4 @@
-from json_rpc import JsonRpcServer
+from htmlc.json_rpc import JsonRpcServer
 
 
 class LanguageServer(JsonRpcServer):

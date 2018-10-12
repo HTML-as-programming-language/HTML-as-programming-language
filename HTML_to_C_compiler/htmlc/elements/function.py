@@ -1,5 +1,5 @@
-from elements.element import Element
-from utils import hyphenated_to_camel_case, indent
+from htmlc.elements.element import Element
+from htmlc.utils import hyphenated_to_camel_case, indent
 
 
 class Param(Element):

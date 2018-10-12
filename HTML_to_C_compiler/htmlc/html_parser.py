@@ -1,6 +1,6 @@
 import re
 
-from utils import split_preserve_substrings
+from htmlc.utils import split_preserve_substrings
 
 
 class HTMLParser:

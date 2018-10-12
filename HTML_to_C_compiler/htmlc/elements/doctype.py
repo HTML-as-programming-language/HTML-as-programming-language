@@ -1,5 +1,5 @@
-from elements.element import Element
-from utils import includeFile
+from htmlc.elements.element import Element
+from htmlc.utils import includeFile
 
 
 class Doctype(Element):

@@ -1,7 +1,7 @@
-import utils
-from html_parser import HTMLParser
-from lexer import Lexer
-from linker import Linker
+from htmlc import utils
+from htmlc.html_parser import HTMLParser
+from htmlc.lexer import Lexer
+from htmlc.linker import Linker
 
 
 class Compiler:
@@ -19,7 +19,7 @@ class Compiler:
         c = self.to_c(element_tree)
         print(c)
                                                     # TODO: this is hardcoded
-        file = open("../working-code.c", "w")       # Write the C code to a file
+        file = open("../../working-code.c", "w")       # Write the C code to a file
         file.write(c)
         file.close()
 

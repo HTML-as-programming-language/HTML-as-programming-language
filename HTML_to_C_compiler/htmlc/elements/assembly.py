@@ -1,4 +1,4 @@
-from elements.element import Element
+from htmlc.elements.element import Element
 
 
 class Assembly(Element):
