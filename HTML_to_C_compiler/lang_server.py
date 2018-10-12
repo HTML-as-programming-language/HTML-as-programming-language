@@ -15,7 +15,6 @@ class LanguageServer(JsonRpcServer):
 
     def text_document__did_open(self, request):
         self.send({
-            "id": "wut",
             "method": "textDocument/publishDiagnostics",
             "params": {
                 "uri": request["params"]["textDocument"]["uri"],
