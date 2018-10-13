@@ -1,8 +1,8 @@
 import sys
 
 from htmlc import utils
-from htmlc.diagnostics import diagnose, contains_error
 from htmlc.html_parser import HTMLParser
+from htmlc.diagnostics import diagnose, contains_error
 from htmlc.lexer import Lexer
 from htmlc.linker import Linker
 
@@ -23,6 +23,7 @@ class Compiler:
         diagnostics.extend(linker.diagnostics)
 
         for d in diagnostics:
+            print("-============================-")
             print(d.human_readable())
 
         if not contains_error(diagnostics):

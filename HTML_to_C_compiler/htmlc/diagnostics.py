@@ -1,4 +1,11 @@
-from colorama import Fore, Style
+import colorama
+from colorama import Fore, Back, Style
+
+"""
+On Windows, calling init() will filter ANSI escape sequences out of any text sent to stdout or stderr, 
+and replace them with equivalent Win32 calls.
+"""
+colorama.init()
 
 class Severity:
     ERROR = 1
@@ -15,24 +22,26 @@ class Diagnostic:
         self.message = message
 
     def human_readable(self):
-        s = ""
-
         sev = self.severity
-        s += "[" + (
-            f"{Fore.RED}ERROR{Style.RESET_ALL}" if sev == Severity.ERROR
+        s = (
+            f"{Back.RED}[ERROR]{Style.RESET_ALL}" if sev == Severity.ERROR
             else
-            f"{Fore.YELLOW}WARNING{Style.RESET_ALL}" if sev == Severity.WARNING
+            f"{Back.YELLOW}[WARNING]{Style.RESET_ALL}" if sev == Severity.WARNING
             else
-            f"{Fore.BLUE}INFO{Style.RESET_ALL}" if sev == Severity.INFO
+            f"{Back.BLUE}[INFO]{Style.RESET_ALL}" if sev == Severity.INFO
             else
-            f"{Fore.GREEN}HINT{Style.RESET_ALL}" if sev == Severity.HINT
+            f"{Back.GREEN}[HINT]{Style.RESET_ALL}" if sev == Severity.HINT
             else ""
-        ) + "]"
+        )
 
-        s += f" {self.code_range.dir}{Fore.CYAN}{self.code_range.filename}{Style.RESET_ALL}" \
+        s += f" {Style.DIM}{self.code_range.dir}{Style.RESET_ALL}" \
+             f"{Fore.CYAN}{self.code_range.filename}{Style.RESET_ALL}" \
              f"\non line {Fore.CYAN}{self.code_range.line}{Style.RESET_ALL} at char {self.code_range.char}"
 
-        s += "\n" + self.message + "\n"
+        mess = self.message
+        if sev == Severity.ERROR:
+            mess = f"{Fore.RED}{mess}{Style.RESET_ALL}"
+        s += "\n\n" + mess + "\n"
         return s
 
 
