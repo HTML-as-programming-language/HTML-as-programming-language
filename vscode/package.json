@@ -2,8 +2,9 @@
     "name": "html-as-programming-language",
     "displayName": "HTML-as-programming-language",
     "description": "wip",
-    "version": "0.0.1",
+    "version": "0.5.0",
     "publisher": "HTML-as-programming-language",
+    "repository": "https://github.com/HTML-as-programming-language/HTML-as-programming-language",
     "engines": {
         "vscode": "^1.28.0"
     },
@@ -11,8 +12,7 @@
         "Other"
     ],
     "activationEvents": [
-        "onLanguage:html",
-        "onLanguage:plaintext"
+        "onLanguage:html"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -26,21 +26,17 @@
             "type": "object",
             "title": "HTML-as-programming-language",
             "properties": {
-                "htmlc.compilerDir": {
-                    "type": "string",
-                    "description": "The directory where the python program is placed"
-                },
                 "htmlc.trace.server": {
-					"scope": "window",
-					"type": "string",
-					"enum": [
-						"off",
-						"messages",
-						"verbose"
-					],
-					"default": "verbose",
-					"description": "Traces the communication between VS Code and the language server."
-				}
+                    "scope": "window",
+                    "type": "string",
+                    "enum": [
+                        "off",
+                        "messages",
+                        "verbose"
+                    ],
+                    "default": "verbose",
+                    "description": "Traces the communication between VS Code and the language server."
+                }
             }
         }
     },

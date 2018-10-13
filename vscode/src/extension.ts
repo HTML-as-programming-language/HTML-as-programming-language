@@ -14,7 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     console.log('"html-as-programming-language" is now active!');
 
-    var config = vscode.workspace.getConfiguration('htmlc');
+    // var config = vscode.workspace.getConfiguration('htmlc');
     
     let disposable = vscode.commands.registerCommand('extension.kikker', () => {
         vscode.window.showInformationMessage('Ik ben een kikker!');
@@ -40,7 +40,7 @@ function startLangServer() {
         command: "htmlclangsvr"
 	};
 	const clientOptions: LanguageClientOptions = {
-		documentSelector: ["html", "plaintext"]
+		documentSelector: ["html"]
 	}
 
     client = new LanguageClient("htmlc", serverOptions, clientOptions);
