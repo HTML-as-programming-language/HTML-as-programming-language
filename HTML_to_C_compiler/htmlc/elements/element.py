@@ -12,6 +12,11 @@ class Element:
     def init(self):
         pass
 
+    def init_children(self):
+        for child in self.children:
+            child.init()
+            child.init_children()
+
     def diagnostics(self):
         """
         Should return a list of Diagnostics

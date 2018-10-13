@@ -1,5 +1,3 @@
-import sys
-
 from htmlc import utils
 from htmlc.html_parser import HTMLParser
 from htmlc.diagnostics import diagnose, contains_error
@@ -18,6 +16,10 @@ class Compiler:
 
         linker = Linker(element_tree, parser)
         linker.link_external_files()
+
+        for el in element_tree:
+            el.init()
+            el.init_children()
 
         diagnostics = diagnose(element_tree)
         diagnostics.extend(linker.diagnostics)
@@ -43,5 +45,4 @@ class Compiler:
 
 
 if __name__ == "__main__":
-    print(sys.argv)
     Compiler("../../working-code.html")

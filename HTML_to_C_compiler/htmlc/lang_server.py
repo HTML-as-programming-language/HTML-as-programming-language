@@ -56,6 +56,10 @@ class LanguageServer(JsonRpcServer):
         linker = Linker(element_tree, parser)
         linker.link_external_files()
 
+        for el in element_tree:
+            el.init()
+            el.init_children()
+
         diagnostics = diagnose(element_tree)
         diagnostics.extend(linker.diagnostics)
         diagnostics.extend(lexer.diagnostics)
