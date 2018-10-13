@@ -77,5 +77,5 @@ class LanguageServer(JsonRpcServer):
         })
 
 
-if __name__ == "__main__":
+def main():
     LanguageServer().start()
