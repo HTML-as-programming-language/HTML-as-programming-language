@@ -1,10 +1,19 @@
+import os
+import re
+from urllib import parse, request as urlreq
+from htmlc import utils
+
+from htmlc.html_parser import HTMLParser
+from htmlc.lexer import Lexer
+from htmlc.diagnostics import diagnose
 from htmlc.json_rpc import JsonRpcServer
+from htmlc.linker import Linker
 
 
 class LanguageServer(JsonRpcServer):
 
     def __init__(self):
-        self.text_document__did_change = self.text_document__did_open
+        self.text_document__did_open = self.text_document__did_change
 
     def initialize(self, request):
         self.respond(request, {
@@ -20,23 +29,48 @@ class LanguageServer(JsonRpcServer):
             }
         })
 
-    def text_document__did_open(self, request):
+    def text_document__did_change(self, request):
+
+        params = request["params"]
+        uri = params["textDocument"]["uri"]
+
+        filepath = parse.urlparse(uri).path
+        filepath = urlreq.url2pathname(filepath)
+        if re.match("\\\\[a-zA-Z]:\\\\", filepath):
+            # user is on windows, remove backslash before drive-letter
+            filepath = filepath[1:]
+
+        if filepath.endswith(".git"):
+            filepath = filepath.split(".git")[0]
+
+        lexer = Lexer(utils.file_dir(filepath), utils.filename(filepath))
+        parser = HTMLParser()
+
+        if "contentChanges" in params and len(params["contentChanges"]):
+            parser.feed(lexer, html=params["contentChanges"][0]["text"])
+        else:
+            parser.feed(lexer, filepath=filepath)
+
+        element_tree = lexer.elements
+
+        linker = Linker(element_tree, parser)
+        linker.link_external_files()
+
+        diagnostics = diagnose(element_tree)
+        diagnostics.extend(linker.diagnostics)
+
         self.send({
             "method": "textDocument/publishDiagnostics",
             "params": {
-                "uri": request["params"]["textDocument"]["uri"],
+                "uri": uri,
                 "diagnostics": [
-                    {
-                        "range": {
-                            "start": {"line": 0, "character": 0},
-                            "end": {"line": 2, "character": 4}
-                        },
-                        "message": "shitty code",
-                        "severity": 1
-                    }
+                    d.to_json()
+                    for d in diagnostics
+                    if os.path.abspath(d.code_range.dir + d.code_range.filename) == filepath
                 ]
             }
         })
 
 
-LanguageServer().start()
+if __name__ == "__main__":
+    LanguageServer().start()

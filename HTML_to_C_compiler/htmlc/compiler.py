@@ -13,7 +13,7 @@ class Compiler:
         lexer = Lexer(utils.file_dir(filepath), utils.filename(filepath))
         parser = HTMLParser()
 
-        parser.feed(filepath, lexer)
+        parser.feed(lexer, filepath=filepath)
         element_tree = lexer.elements
 
         linker = Linker(element_tree, parser)

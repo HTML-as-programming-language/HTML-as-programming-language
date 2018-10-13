@@ -1,3 +1,6 @@
-from htmlc.compiler import Compiler
+import sys
 
-Compiler("../working-code.html")
+from htmlc.lang_server import LanguageServer
+
+if "langsvr" in sys.argv:
+    LanguageServer().start()

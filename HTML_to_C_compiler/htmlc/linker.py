@@ -62,6 +62,6 @@ class Linker:
             return
 
         lexer = Lexer(utils.file_dir(path), utils.filename(path))
-        self.html_parser.feed(path, lexer)
+        self.html_parser.feed(lexer, filepath=path)
         link_element.children = lexer.elements
         self.diagnostics.extend(lexer.diagnostics)

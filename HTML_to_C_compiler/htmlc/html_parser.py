@@ -39,14 +39,16 @@ class HTMLParser:
         def handle_doctype(self, doctype):
             pass
 
-    def feed(self, filepath, handler):
+    def feed(self, handler, html=None, filepath=None):
         """
         call this to start reading a HTML file
+        :param html:
         :param handler:
         :param filepath: for example: "../working-code.html"
         """
 
-        html = open(filepath).read()
+        if not html:
+            html = open(filepath).read()
 
         tags = self.__split_html_by_tags__(html)
         line = re.split(".+", html)[0].count("\n")  # number of empty lines at top of file

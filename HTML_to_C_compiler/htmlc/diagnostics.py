@@ -21,6 +21,13 @@ class Diagnostic:
         self.code_range = code_range
         self.message = message
 
+    def to_json(self):
+        return {
+            "range": self.code_range.to_json(),
+            "message": self.message,
+            "severity": self.severity
+        }
+
     def human_readable(self):
         sev = self.severity
         s = (
