@@ -92,12 +92,17 @@ class Lexer(HTMLParser.Handler):
             self.current_element.code_range.endchar = endchar
             self.current_element = self.current_element.parent
         elif self.current_element:
-            raise Exception(
-                "Expected closing tag: </{}>\nGot: </{}> on line {}"
-                    .format(self.current_element.tagname, tagname, line)
-            )
+            self.diagnostics.append(Diagnostic(
+                Severity.ERROR,
+                CodeRange(self.dir, self.filename, line, char, line, endchar),
+                f"Expected closing tag: </{self.current_element.tagname}>\nGot: </{tagname}>"
+            ))
         else:
-            raise Exception("Unexpected closing tag </{}> on line {}".format(tagname, line))
+            self.diagnostics.append(Diagnostic(
+                Severity.ERROR,
+                CodeRange(self.dir, self.filename, line, char, line, endchar),
+                f"Unexpected closing tag </{tagname}>"
+            ))
 
     def handle_comment(self, comment_text, line, char, endchar):
         self.handle_starttag("comment", {"text": comment_text}, line, char, endchar)

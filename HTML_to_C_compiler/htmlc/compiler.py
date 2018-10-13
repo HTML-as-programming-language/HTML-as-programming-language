@@ -21,6 +21,7 @@ class Compiler:
 
         diagnostics = diagnose(element_tree)
         diagnostics.extend(linker.diagnostics)
+        diagnostics.extend(lexer.diagnostics)
 
         for d in diagnostics:
             print("-============================-")

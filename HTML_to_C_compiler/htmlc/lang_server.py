@@ -58,6 +58,7 @@ class LanguageServer(JsonRpcServer):
 
         diagnostics = diagnose(element_tree)
         diagnostics.extend(linker.diagnostics)
+        diagnostics.extend(lexer.diagnostics)
 
         self.send({
             "method": "textDocument/publishDiagnostics",
