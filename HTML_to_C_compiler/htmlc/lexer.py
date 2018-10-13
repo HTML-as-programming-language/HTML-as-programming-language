@@ -1,3 +1,5 @@
+from htmlc.code_range import CodeRange
+from htmlc.diagnostics import Diagnostic, Severity
 from htmlc.elements.assembly import Assembly
 from htmlc.elements.assign import Assign
 from htmlc.elements.boolean_elements import Truth, Lie
@@ -6,11 +8,13 @@ from htmlc.elements.comment import Comment
 from htmlc.elements.doctype import Doctype
 from htmlc.elements.expression import Expression, YaReally, Maybe, NoWai
 from htmlc.elements.function import Def, Param
+from htmlc.elements.function_call import FunctionCall
 from htmlc.elements.link import Link, Script
 from htmlc.elements.loop import Loop
 from htmlc.elements.return_element import Return
 from htmlc.elements.var import Var
 from htmlc.html_parser import HTMLParser
+from htmlc.utils import camel_case_to_hyphenated
 
 
 class Lexer(HTMLParser.Handler):
@@ -51,8 +55,9 @@ class Lexer(HTMLParser.Handler):
             Doctype,
             Expression, YaReally, Maybe, NoWai      # if/else if/else functionality
         ]
+        self.diagnostics = []
 
-    def handle_starttag(self, tagname, attrs, line):
+    def handle_starttag(self, tagname, attrs, line, char, endchar):
         """
         Create a new element and put it in the element tree
         All future elements will be a child of this element UNTIL handle_closingtag() is called
@@ -60,9 +65,8 @@ class Lexer(HTMLParser.Handler):
         new_element = self.new_element_by_tagname(tagname)
         new_element.tagname = tagname
         new_element.attributes = attrs
-        new_element.dir = self.dir
-        new_element.filename = self.filename
-        new_element.line = line
+        new_element.code_range = CodeRange(self.dir, self.filename, line, char, line, endchar)
+
         if self.current_element:
             self.current_element.children.append(new_element)
             new_element.parent = self.current_element
@@ -78,12 +82,14 @@ class Lexer(HTMLParser.Handler):
             else:
                 self.current_element.data = data
 
-    def handle_closingtag(self, tagname, line):
+    def handle_closingtag(self, tagname, line, char, endchar):
         """
         End of element found.
         self.current_element = self.current_element.parent
         """
         if self.current_element and tagname == self.current_element.tagname:
+            self.current_element.code_range.endline = line
+            self.current_element.code_range.endchar = endchar
             self.current_element = self.current_element.parent
         elif self.current_element:
             raise Exception(
@@ -93,13 +99,13 @@ class Lexer(HTMLParser.Handler):
         else:
             raise Exception("Unexpected closing tag </{}> on line {}".format(tagname, line))
 
-    def handle_comment(self, comment_text, line):
-        self.handle_starttag("comment", {"text": comment_text}, line)
-        self.handle_closingtag("comment", line)
+    def handle_comment(self, comment_text, line, char, endchar):
+        self.handle_starttag("comment", {"text": comment_text}, line, char, endchar)
+        self.handle_closingtag("comment", line, char, endchar)
 
-    def handle_doctype(self, doctype, line):
-        self.handle_starttag("doctype", {"text": doctype}, line)
-        self.handle_closingtag("doctype", line)
+    def handle_doctype(self, doctype):
+        self.handle_starttag("doctype", {"text": doctype}, 0, 0, 0)
+        self.handle_closingtag("doctype", 0, 0, len(doctype))
 
     def new_element_by_tagname(self, tagname):
         """
@@ -122,10 +128,11 @@ class Lexer(HTMLParser.Handler):
         it means that there's an unclosed element somewhere in the file
         """
         if self.current_element:
-            raise Exception(
-                "Unclosed element <{}> on line {}\nDid you mean <{} ...attributes... /> ?".format(
+            self.diagnostics.append(Diagnostic(
+                Severity.ERROR,
+                self.current_element.code_range,
+                "Unclosed element <{}>\nDid you mean <{} ...attributes... /> ?".format(
                     self.current_element.tagname,
-                    self.current_element.line,
                     self.current_element.tagname
                 )
-            )
+            ))

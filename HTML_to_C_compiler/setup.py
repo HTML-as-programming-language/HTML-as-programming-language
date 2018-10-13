@@ -9,7 +9,9 @@ setup(
     description='(WIP) Write HTML-code that compiles to C',
     long_description=open('README.txt').read(),
     packages=find_packages(),
-    install_requires=[],
+    install_requires=[
+        "colorama"      # used to print with colors
+    ],
     entry_points={
         'console_scripts': [
             'htmlclangsvr = htmlc.lang_server',

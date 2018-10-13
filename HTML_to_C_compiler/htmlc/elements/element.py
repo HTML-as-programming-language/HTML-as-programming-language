@@ -7,9 +7,16 @@ class Element:
         self.children = []
         self.parent = None
         self.tagname = ""
-        self.line = -1
-        self.dir = "./"
-        self.filename = ""
+        self.code_range = None
+
+    def init(self):
+        pass
+
+    def diagnostics(self):
+        """
+        Should return a list of Diagnostics
+        """
+        return []
 
     def to_c(self):
         return ""

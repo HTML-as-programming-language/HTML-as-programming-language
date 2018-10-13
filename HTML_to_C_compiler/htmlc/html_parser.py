@@ -21,30 +21,28 @@ class HTMLParser:
 
     class Handler:
 
-        def handle_comment(self, comment_text, line):
+        def handle_comment(self, comment_text, line, char, endchar):
             pass
 
-        def handle_starttag(self, tagname, attrs, line):
+        def handle_starttag(self, tagname, attrs, line, char, endchar):
             pass
 
         def handle_data(self, data, line):
             pass
 
-        def handle_closingtag(self, tagname, line):
+        def handle_closingtag(self, tagname, line, char, endchar):
             pass
 
         def finish_parsing(self):
             pass
 
-        def handle_doctype(self, doctype, line):
-            pass
-
-        def handle_expression_start(self, condition, line):
+        def handle_doctype(self, doctype):
             pass
 
     def feed(self, filepath, handler):
         """
         call this to start reading a HTML file
+        :param handler:
         :param filepath: for example: "../working-code.html"
         """
 
@@ -52,9 +50,15 @@ class HTMLParser:
 
         tags = self.__split_html_by_tags__(html)
         line = re.split(".+", html)[0].count("\n")  # number of empty lines at top of file
+        char = 0
+        line_len = 0
         for tag in tags:
             start_line = line + 1
-            line += tag.count("\n")
+            new_lines = tag.count("\n")
+            line += new_lines
+            char = 0 if new_lines > 0 else line_len
+            line_len = len(tag)
+            endchar = char + line_len
             tag = tag.strip()
 
             if tag.isspace() or len(tag) == 0:
@@ -64,10 +68,10 @@ class HTMLParser:
             tagname = split_preserve_substrings(tagname_and_attrs, " ")[0].replace("/", "")
 
             if tagname == "!--":    # found a comment
-                handler.handle_comment(tag[4:][:-3], start_line)
+                handler.handle_comment(tag[4:][:-3], start_line, char, endchar)
                 continue
             elif tagname.lower() == "!doctype":     # found a doctype-tag
-                handler.handle_doctype(tag, start_line)
+                handler.handle_doctype(tag)
                 continue
 
             data = tag.split(">")[1]
@@ -79,12 +83,14 @@ class HTMLParser:
                 tag = tag[:-1]
 
             if not is_closing_tag:
-                handler.handle_starttag(tagname, self.__parse_attrs__(tagname_and_attrs), start_line)
+                handler.handle_starttag(
+                    tagname, self.__parse_attrs__(tagname_and_attrs), start_line, char, endchar
+                )
             elif is_closing_tag:
-                handler.handle_closingtag(tagname, start_line)
+                handler.handle_closingtag(tagname, start_line, char, endchar)
 
             if is_self_closing_tag:
-                handler.handle_closingtag(tagname, start_line)
+                handler.handle_closingtag(tagname, start_line, char, endchar)
 
             if len(data) > 0 and not data.isspace():
                 handler.handle_data(data, start_line)

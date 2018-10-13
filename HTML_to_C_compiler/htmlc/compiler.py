@@ -1,4 +1,7 @@
+import sys
+
 from htmlc import utils
+from htmlc.diagnostics import diagnose, contains_error
 from htmlc.html_parser import HTMLParser
 from htmlc.lexer import Lexer
 from htmlc.linker import Linker
@@ -16,12 +19,14 @@ class Compiler:
         linker = Linker(element_tree, parser)
         linker.link_external_files()
 
-        c = self.to_c(element_tree)
-        print(c)
-                                                    # TODO: this is hardcoded
-        file = open("../../working-code.c", "w")       # Write the C code to a file
-        file.write(c)
-        file.close()
+        diagnostics = diagnose(element_tree)
+        diagnostics.extend(linker.diagnostics)
+
+        for d in diagnostics:
+            print(d.human_readable())
+
+        if not contains_error(diagnostics):
+            print(self.to_c(element_tree))
 
     def to_c(self, lexed_elements):
         """
@@ -35,13 +40,6 @@ class Compiler:
         return c
 
 
-compiler = Compiler("../working-code.html")   # Construct the compiler
-
-
-# TODO: litle commandline program that gets flags from the user
-
-# compile to C
-# compile to assembly
-
-# compile and run
-# compile and print result in commandline
+if __name__ == "__main__":
+    print(sys.argv)
+    Compiler("../../working-code.html")

@@ -1,3 +1,4 @@
+from htmlc.diagnostics import Diagnostic, Severity
 from htmlc.elements.element import Element
 from htmlc.utils import hyphenated_to_camel_case
 
@@ -16,37 +17,46 @@ class Var(Element):
     char aChar = 'b';
     """
 
-    def to_c(self):
+    def __init__(self):
+        super().__init__()
+        self.type = None
+        self.var_name = None
+        self.attr = None
 
-        var_name = None
-        attr = None
+    def init(self):
         for key in self.attributes:
             if key == "type":
                 continue
-            var_name = hyphenated_to_camel_case(key)
-            attr = self.attributes[key]
+            self.var_name = hyphenated_to_camel_case(key)
+            self.attr = self.attributes[key]
 
-        if not var_name:
-            raise Exception(
-                "No variable name defined at line {}".format(self.line)
-            )
+        self.type = self.attributes.get("type", {}).get("val")
+        if self.type is None:  # user did not provide type like <var x=y type="int"/>
+            self.type = (self.attr["type"] or "unknown") if self.attr else "unknown"
 
-        val = attr["val"]
-
-        typee = self.attributes.get("type", {}).get("val")
-        if typee is None:                         # user did not provide type like <var x=y type="int"/>
-            typee = attr["type"] or "unknown"     # Guessed type
-
-        if typee == "unknown":
-            raise Exception(
-                "Unknown variable type at line {}"
+    def diagnostics(self):
+        d = []
+        if not self.var_name:
+            d.append(Diagnostic(
+                Severity.ERROR,
+                self.code_range,
+                "No variable name defined"
+            ))
+        if not self.type or self.type == "unknown":
+            d.append(Diagnostic(
+                Severity.ERROR,
+                self.code_range,
+                "Unknown variable type"
                 "\nPlease provide a type in the type attribute like <var x=y type='int'/>"
-                    .format(self.line)
-            )
+            ))
+        return d
 
-        if typee == "String":
+
+    def to_c(self):
+        val = self.attr["val"]
+        if self.type == "String":
             val = '"{}"'.format(val)
-        elif typee == "char":
+        elif self.type == "char":
             val = "'{}'".format(val)
 
-        return "{} {} = {};\n".format(typee, var_name, val)
+        return "{} {} = {};\n".format(self.type, self.var_name, val)

@@ -1,6 +1,7 @@
 import os
 
 from htmlc import utils
+from htmlc.diagnostics import Diagnostic, Severity
 from htmlc.lexer import Lexer
 
 
@@ -10,9 +11,10 @@ class Linker:
         self.element_tree = element_tree
         self.html_parser = html_parser
         self.linked = [
-            os.path.abspath(element_tree[0].dir + element_tree[0].filename)
+            os.path.abspath(element_tree[0].code_range.dir + element_tree[0].code_range.filename)
             if len(element_tree) > 0 else None
         ]
+        self.diagnostics = []
 
     def link_external_files(self):
 
@@ -31,16 +33,18 @@ class Linker:
             src_attr_name = "src" if el.tagname == "script" else "href"
             src = el.attributes.get(src_attr_name, {}).get("val")
             if not src:
-                raise Exception(
-                    "Found {} element without {} attribute on line {}"
-                        .format(el.tagname, src_attr_name, el.line)
-                )
+                self.diagnostics.append(Diagnostic(
+                    Severity.ERROR,
+                    el.code_range,
+                    "Found {} element without {} attribute".format(el.tagname, src_attr_name)
+                ))
+                return
             self.__link__(src, el)
             self.__loop_trough_elements__(el.children)
 
     def __link__(self, file, link_element):
 
-        path = os.path.abspath(link_element.dir + file)
+        path = os.path.abspath(link_element.code_range.dir + file)
 
         if path in self.linked:
             return
@@ -50,11 +54,14 @@ class Linker:
         try:
             open(path)
         except FileNotFoundError:
-            raise FileNotFoundError(
-                "{}:{} Cannot include file '{}'. File not found"
-                    .format(link_element.filename, link_element.line, file)
-            )
+            self.diagnostics.append(Diagnostic(
+                Severity.WARNING,
+                link_element.code_range,
+                "'{}' not included, file was not found".format(file)
+            ))
+            return
 
         lexer = Lexer(utils.file_dir(path), utils.filename(path))
         self.html_parser.feed(path, lexer)
         link_element.children = lexer.elements
+        self.diagnostics.extend(lexer.diagnostics)

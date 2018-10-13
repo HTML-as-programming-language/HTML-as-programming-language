@@ -1,3 +1,4 @@
+from htmlc.diagnostics import Diagnostic, Severity
 from htmlc.elements.element import Element
 from htmlc.utils import indent
 
@@ -31,13 +32,23 @@ class Expression(Element):
     }
     """
 
-    def to_c(self):
+    def __init__(self):
+        super().__init__()
+        self.x = None
 
-        x = self.attributes.get("x", "").get("val")
-        if not x:
-            raise Exception("Expression element found without x-attribute on line {}".format(self.line))
+    def init(self):
+        self.x = self.attributes.get("x", {}).get("val")
+
+    def diagnostics(self):
+        return [] if self.x else [Diagnostic(
+            Severity.ERROR,
+            self.code_range,
+            "Expression element without x attribute"
+        )]
+
+    def to_c(self):
         # 'if' body:
-        c = "if ({})".format(x) + " {\n"
+        c = "if ({})".format(self.x) + " {\n"
         for child in self.children:
             if not isinstance(child, YaReally):
                 continue
@@ -59,28 +70,43 @@ class Expression(Element):
 
 class ExpressionChild(Element):
 
-    def check(self):
-        if not isinstance(self.parent, Expression):
-            raise Exception(
-                "{} element found outside of expression element on line {}".format(self.tagname, self.line)
+    def diagnostics(self):
+        return [] if isinstance(self.parent, Expression) else [
+            Diagnostic(
+                Severity.ERROR,
+                self.code_range,
+                "{} element found outside of expression element".format(self.tagname)
             )
+        ]
 
 
 class YaReally(ExpressionChild):
 
     def to_c(self):
-        self.check()
         return self.children_to_c()
 
 
 class Maybe(ExpressionChild):
 
+    def __init__(self):
+        super().__init__()
+        self.x = None
+
+    def init(self):
+        self.x = self.attributes.get("x", "").get("val")
+
+    def diagnostics(self):
+        d = super().diagnostics()
+        if not self.x:
+            d.append(Diagnostic(
+                Severity.ERROR,
+                self.code_range,
+                "Maybe element found without x-attribute"
+            ))
+        return d
+
     def to_c(self):
-        self.check()
-        x = self.attributes.get("x", "").get("val")
-        if not x:
-            raise Exception("Maybe element found without x-attribute on line {}".format(self.line))
-        return " else if ({})".format(x) + " {\n" + (
+        return " else if ({})".format(self.x) + " {\n" + (
 
             indent(self.children_to_c(), 1)
 
@@ -90,5 +116,4 @@ class Maybe(ExpressionChild):
 class NoWai(ExpressionChild):
 
     def to_c(self):
-        self.check()
         return " else {\n" + indent(self.children_to_c(), 1) + "}\n"

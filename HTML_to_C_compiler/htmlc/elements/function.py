@@ -1,22 +1,28 @@
+from htmlc.diagnostics import Diagnostic, Severity
 from htmlc.elements.element import Element
 from htmlc.utils import hyphenated_to_camel_case, indent
 
 
 class Param(Element):
 
-    def get_name(self):
+    def __init__(self):
+        super().__init__()
+        self.name = None
+        self.type = None
+
+    def init(self):
+        self.type = self.attributes.get("type", {}).get("val")
         for key in self.attributes:
             if key != "type":
-                return key
-        raise Exception(
-            "Param with no name on line " + self.line
-        )
+                self.name = key
+                break
 
-    def get_type(self):
-        typee = self.attributes.get("type", {}).get("val")
-        if not typee:
-            raise Exception("Param without a type on line {}".format(self.line))
-        return typee
+    def diagnostics(self):
+        return [] if self.type else [Diagnostic(
+            Severity.ERROR,
+            self.code_range,
+            "Unkown param type"
+        )]
 
 
 class Def(Element):
@@ -30,6 +36,16 @@ class Def(Element):
     int multiply() {}
     """
 
+    def diagnostics(self):
+        d = []
+        for el in self.children:
+            if not isinstance(el, Param):
+                continue
+            if not el.name:
+                d.append(Diagnostic(Severity.ERROR, el.code_range, "Param without name"))
+        return d
+
+
     def to_c(self):
         return_type = self.attributes.get("returns", {}).get("val", "void")
         func_name = None
@@ -42,8 +58,8 @@ class Def(Element):
         for el in self.children:
             if el.tagname != "param":
                 continue
-            param_name = el.get_name()
-            param_type = el.get_type()
+            param_name = el.name
+            param_type = el.type
             params.append(param_type + " " + param_name)
 
         c = "\n\n{} {}({})".format(
