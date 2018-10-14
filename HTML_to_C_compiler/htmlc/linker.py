@@ -50,18 +50,25 @@ class Linker:
             return
 
         self.linked.append(path)
-
+        html = None
         try:
-            open(path)
+            html = open(path).read()
         except FileNotFoundError:
             self.diagnostics.append(Diagnostic(
                 Severity.WARNING,
                 link_element.code_range,
-                "'{}' not included, file was not found".format(file)
+                f"'{file}' not included, file was not found"
+            ))
+            return
+        except PermissionError:
+            self.diagnostics.append(Diagnostic(
+                Severity.WARNING,
+                link_element.code_range,
+                f"Cannot open '{file}', permission denied"
             ))
             return
 
         lexer = Lexer(utils.file_dir(path), utils.filename(path))
-        self.html_parser.feed(lexer, filepath=path)
+        self.html_parser.feed(lexer, html=html)
         link_element.children = lexer.elements
         self.diagnostics.extend(lexer.diagnostics)

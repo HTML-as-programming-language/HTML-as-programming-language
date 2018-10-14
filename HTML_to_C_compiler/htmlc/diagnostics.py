@@ -1,11 +1,5 @@
-import colorama
 from colorama import Fore, Back, Style
 
-"""
-On Windows, calling init() will filter ANSI escape sequences out of any text sent to stdout or stderr, 
-and replace them with equivalent Win32 calls.
-"""
-colorama.init()
 
 class Severity:
     ERROR = 1
