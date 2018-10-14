@@ -112,6 +112,13 @@ class Lexer(HTMLParser.Handler):
         self.handle_starttag("doctype", {"text": doctype}, 0, 0, 0)
         self.handle_closingtag("doctype", 0, 0, len(doctype))
 
+    def handle_invalid_tag(self, line, char, endchar):
+        self.diagnostics.append(Diagnostic(
+            Severity.ERROR,
+            CodeRange(self.dir, self.filename, line, char, line, endchar),
+            f"Invalid tag"
+        ))
+
     def new_element_by_tagname(self, tagname):
         """
         Creates an new element based on the tagname.

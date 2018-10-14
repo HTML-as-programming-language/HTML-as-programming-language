@@ -39,6 +39,9 @@ class HTMLParser:
         def handle_doctype(self, doctype):
             pass
 
+        def handle_invalid_tag(self, line, char, endchar):
+            pass
+
     def feed(self, handler, html=None, filepath=None):
         """
         call this to start reading a HTML file
@@ -76,7 +79,11 @@ class HTMLParser:
                 handler.handle_doctype(tag)
                 continue
 
-            data = tag.split(">")[1]
+            try:
+                data = tag.split(">")[1]
+            except IndexError:
+                handler.handle_invalid_tag(start_line, char, endchar)
+                continue
 
             is_self_closing_tag = tagname_and_attrs.endswith("/")   # <p/> is a self closing tag
             is_closing_tag = tag.startswith("</")                   # </p> is a closing tag
