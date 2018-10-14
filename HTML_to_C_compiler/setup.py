@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='HTML-as-programming-language',
-    version='0.1.5',
+    version='0.1.7',
     author="hilkojj",
     author_email="hilkojj@outlook.com",
     url="https://github.com/HTML-as-programming-language/HTML-as-programming-language",
@@ -15,7 +15,7 @@ setup(
     entry_points={
         'console_scripts': [
             'htmlclangsvr = htmlc.lang_server:main',
-            'htmlc = htmlc.compiler'
+            'htmlc = htmlc.compiler:main'
         ]
     }
 )

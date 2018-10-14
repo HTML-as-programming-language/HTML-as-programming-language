@@ -24,7 +24,7 @@ class Compiler:
     def __init__(self, filepath: str):
         filedir = utils.file_dir(filepath)
         filename = utils.filename(filepath)
-        lexer = Lexer(filedir, filedir)
+        lexer = Lexer(filedir, filename)
         parser = HTMLParser()
 
         parser.feed(lexer, filepath=filepath)

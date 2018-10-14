@@ -53,14 +53,14 @@ class HTMLParser:
         tags = self.__split_html_by_tags__(html)
         line = re.split(".+", html)[0].count("\n")  # number of empty lines at top of file
         char = 0
-        line_len = 0
+        next_tag_char = 0
         for tag in tags:
             start_line = line + 1
             new_lines = tag.count("\n")
             line += new_lines
-            char = 0 if new_lines > 0 else line_len
-            line_len = len(tag)
-            endchar = char + line_len
+            char = next_tag_char
+            endchar = char + len(tag)
+            next_tag_char = 0 if tag.endswith("\n") else endchar
             tag = tag.strip()
 
             if tag.isspace() or len(tag) == 0:
