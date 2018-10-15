@@ -79,18 +79,11 @@ class Compiler:
 
 # for debugging purposes:
 if __name__ == "__main__":
-    if sys.version_info < (4,): # python version < 3
-        print(
-            f"You are running Python version {sys.version_info[0]}.{sys.version_info[1]}\n"
-            "HTMLC requires Python 3.\n"
-            "If you have Python 3 try:\n"
-            "pip3 install HTML-as-programming-language"
-        )
     Compiler("../../working-code.html").save_to_c_file()
 
 
 def main():
-    if sys.version_info < (4,): # python version < 3
+    if sys.version_info < (3,): # python version < 3
         print(
             f"You are running Python version {sys.version_info[0]}.{sys.version_info[1]}\n"
             "HTMLC requires Python 3.\n"
