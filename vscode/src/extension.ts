@@ -6,6 +6,7 @@ import {
 	LanguageClientOptions,
 	ServerOptions,
 } from 'vscode-languageclient';
+import { ActionTreeProvider } from './action-tree';
 
 let client: LanguageClient;
 
@@ -26,6 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
         disposable
     ]);
 
+    vscode.window.registerTreeDataProvider("htmlc-actions", new ActionTreeProvider());
 }
 
 // this method is called when the extension is deactivated

@@ -38,7 +38,29 @@
                     "description": "Traces the communication between VS Code and the language server."
                 }
             }
+        },
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "htmlc-view",
+                    "title": "HTML-as-programming-language",
+                    "icon": "resources/activitybar-icon.svg"
+                }
+            ]
+        },
+        "views": {
+            "htmlc-view": [
+                {
+                    "id": "htmlc-actions",
+                    "name": "Actions"
+                },
+                {
+                    "id": "htmlc-wiki",
+                    "name": "Wiki"
+                }
+            ]
         }
+        
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
