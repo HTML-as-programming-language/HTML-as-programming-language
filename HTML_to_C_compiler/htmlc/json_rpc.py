@@ -29,8 +29,7 @@ class JsonRpcServer:
             buffer += sys.stdin.read(1)
             if not content_len:
 
-                if re.match("Content-Length: \d+\n\n", buffer):
-                    started = True
+                if re.match("Content-Length: \d+\n\n", buffer.replace("\r", "")):
                     content_len = int(buffer.split(": ")[1].split("\r")[0])
                     buffer = ""
 
