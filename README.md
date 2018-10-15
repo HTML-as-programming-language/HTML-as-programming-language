@@ -1,5 +1,11 @@
 # HTML-as-programming-language
 
+* [Installation & requirements](#installation-&-requirements)
+* [Visual Studio Code extention](#Visual-Studio-Code-extention)
+* [Language Server](#Language-Server)
+* [Usage](#usage)
+* [Write code for Arduino/AVR microcontrollers](#Write-code-for-Arduino/AVR-microcontrollers)
+
 ## Installation & requirements
 
 ### Requirements
@@ -17,12 +23,12 @@ PyPi package ([project page](https://pypi.org/project/HTML-as-programming-langua
 pip install HTML-as-programming-language
 ```
 
-### Visual Studio Code extention
+## Visual Studio Code extention
 Get live code diagnostics by downloading [HTML-as-programming-language](https://marketplace.visualstudio.com/items?itemName=HTML-as-programming-language.html-as-programming-language) for VSCode.
 
 (This extention requires 'HTML-as-programming-language' itself)
 
-### Language Server
+## Language Server
 If you wish not to use VSCode but still want live code diagnostics you can use the HTML-language-server.
 
 The language server can be started with the following command:
@@ -31,13 +37,35 @@ htmlclangsvr
 ```
 
 
-### Usage
-* Transpile HTML-code to C-code:
-    ```
-    htmlc my-code.html
-    ```
-    This wil output C-code to ./out/my-code.c
+## Usage
+Transpile HTML-code to C-code:
+```
+htmlc my-code.html
+```
+This wil output C-code to ./out/my-code.c
 
-* Upload to Arduino/AVR microcontrollers:
+If you want to write code for Arduino/AVR read the next section.
 
-    wip
+
+## Write code for Arduino/AVR microcontrollers:
+
+To write code for Adruino/AVR microcontrollers, (Arduino UNO for example) you need to put a DOCTYPE tag in your HTML file.
+
+For example:
+```HTML
+<!DOCTYPE avr/atmega328p>
+```
+Simply type 'avr/' followed by the microcontroller name.
+(atmega328p is the name of the microcontroller used by Arduino UNO)
+
+### Compile
+To compile your AVR/Arduino code:
+```
+htmlc my-code.html -compile
+```
+
+### Upload to Arduino/Microcontroller
+To upload your code to an arduino or other AVR microcontroller:
+```
+htmlc my-code.html -upload
+```

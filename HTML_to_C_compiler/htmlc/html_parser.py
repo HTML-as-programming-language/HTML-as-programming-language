@@ -76,7 +76,7 @@ class HTMLParser:
                 handler.handle_comment(tag[4:][:-3], start_line, char, endchar)
                 continue
             elif tagname.lower() == "!doctype":     # found a doctype-tag
-                handler.handle_doctype(tag)
+                handler.handle_doctype(tagname_and_attrs.lower().replace("!doctype", "").strip())
                 continue
 
             try:

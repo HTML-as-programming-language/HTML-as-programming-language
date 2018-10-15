@@ -5,7 +5,6 @@ from htmlc.elements.assign import Assign
 from htmlc.elements.boolean_elements import Truth, Lie
 from htmlc.elements.c import C
 from htmlc.elements.comment import Comment
-from htmlc.elements.doctype import Doctype
 from htmlc.elements.expression import Expression, YaReally, Maybe, NoWai
 from htmlc.elements.function import Def, Param
 from htmlc.elements.function_call import FunctionCall
@@ -36,6 +35,7 @@ class Lexer(HTMLParser.Handler):
     def __init__(self, dir, filename):
         self.dir = dir
         self.filename = filename
+        self.doctype = None
         self.current_element = None
         self.elements = []
         self.element_classes = [
@@ -52,7 +52,6 @@ class Lexer(HTMLParser.Handler):
             Comment,    # <!-- this is a comment --> OR <comment text="this is a comment"/>
             Link,       # <link type="text/html" href="./include-this-file.html"/>
             Script,      # <script type="text/html" src="./include-this-file.html"/>
-            Doctype,
             Expression, YaReally, Maybe, NoWai      # if/else if/else functionality
         ]
         self.diagnostics = []
@@ -109,8 +108,7 @@ class Lexer(HTMLParser.Handler):
         self.handle_closingtag("comment", line, char, endchar)
 
     def handle_doctype(self, doctype):
-        self.handle_starttag("doctype", {"text": doctype}, 0, 0, 0)
-        self.handle_closingtag("doctype", 0, 0, len(doctype))
+        self.doctype = doctype
 
     def handle_invalid_tag(self, line, char, endchar):
         self.diagnostics.append(Diagnostic(

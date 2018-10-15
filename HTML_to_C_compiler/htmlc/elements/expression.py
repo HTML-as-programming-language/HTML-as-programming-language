@@ -93,7 +93,7 @@ class Maybe(ExpressionChild):
         self.x = None
 
     def init(self):
-        self.x = self.attributes.get("x", "").get("val")
+        self.x = self.attributes.get("x", {}).get("val")
 
     def diagnostics(self):
         d = super().diagnostics()

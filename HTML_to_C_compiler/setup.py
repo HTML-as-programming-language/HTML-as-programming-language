@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='HTML-as-programming-language',
-    version='0.1.7',
+    version='0.1.9',
     author="hilkojj",
     author_email="hilkojj@outlook.com",
     url="https://github.com/HTML-as-programming-language/HTML-as-programming-language",
@@ -10,7 +10,8 @@ setup(
     long_description=open('README.txt').read(),
     packages=find_packages(),
     install_requires=[
-        "colorama"      # used to print with colors
+        "colorama",      # used to print with colors
+        "pyavrutils"
     ],
     entry_points={
         'console_scripts': [
