@@ -17,15 +17,17 @@ export function activate(context: vscode.ExtensionContext) {
 
     // var config = vscode.workspace.getConfiguration('htmlc');
     
-    let disposable = vscode.commands.registerCommand('extension.kikker', () => {
+    vscode.commands.registerCommand('extension.kikker', () => {
         vscode.window.showInformationMessage('Ik ben een kikker!');
     });
 
+    vscode.commands.registerCommand('htmlc.transpile', () => htmlc());
+
+    vscode.commands.registerCommand('htmlc.compile', () => htmlc(["-compile"]));
+
+    vscode.commands.registerCommand('htmlc.upload', () => htmlc(["-upload"]));
+
     startLangServer();
-    context.subscriptions.concat([
-        client.start(),
-        disposable
-    ]);
 
     vscode.window.registerTreeDataProvider("htmlc-actions", new ActionTreeProvider());
 }
@@ -46,4 +48,16 @@ function startLangServer() {
 	}
 
     client = new LanguageClient("htmlc", serverOptions, clientOptions);
+    client.start();
+}
+
+function htmlc(args?: string[]) {
+
+    if (!vscode.window.activeTextEditor)
+        return vscode.window.showErrorMessage("Please open a HTML file first");
+
+    const terminal = vscode.window.createTerminal(`transpile HTML to C`);
+    var fileName = vscode.window.activeTextEditor.document.fileName.split("\\").join("/");
+    terminal.sendText(`htmlc ${fileName} ${(args || []).join(" ")}`);
+    terminal.show();
 }

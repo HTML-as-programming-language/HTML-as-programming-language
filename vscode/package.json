@@ -20,6 +20,18 @@
             {
                 "command": "extension.kikker",
                 "title": "kikker"
+            },
+            {
+                "command": "htmlc.transpile",
+                "title": "Transpile HTML-code to C-code"
+            },
+            {
+                "command": "htmlc.compile",
+                "title": "Compile your HTML-code"
+            },
+            {
+                "command": "htmlc.upload",
+                "title": "Compile & upload your HTML-code to your AVR Microcontroller"
             }
         ],
         "configuration": {
