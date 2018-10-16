@@ -1,6 +1,4 @@
-<!DOCTYPE arduino>
-
-
+<!DOCTYPE avr/atmega328p>
 
 <!-- multi-line
 comments
@@ -24,7 +22,7 @@ line string"/>
 
 <assign a>100</assign>
 
-<expression x="a > 50">
+<expression x="a >= 50 && a <= 3 && a != 2">
     <ya-really>
         <!-- if-code here -->
     </ya-really>
@@ -68,10 +66,10 @@ line string"/>
 <link type="text/html" href="./include-this-file-too.html"/>
 
 
-<multiply>
+<!-- <multiply>
     <param>4</param>
     <param>5</param>
-</multiply>
+</multiply> -->
 
 <loop to=5>
 </loop>

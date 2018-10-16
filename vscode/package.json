@@ -1,0 +1,94 @@
+{
+    "name": "html-as-programming-language",
+    "displayName": "HTML-as-programming-language",
+    "description": "wip",
+    "version": "0.5.0",
+    "publisher": "HTML-as-programming-language",
+    "repository": "https://github.com/HTML-as-programming-language/HTML-as-programming-language",
+    "engines": {
+        "vscode": "^1.28.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onLanguage:html"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.kikker",
+                "title": "kikker"
+            },
+            {
+                "command": "htmlc.transpile",
+                "title": "Transpile HTML-code to C-code"
+            },
+            {
+                "command": "htmlc.compile",
+                "title": "Compile your HTML-code"
+            },
+            {
+                "command": "htmlc.upload",
+                "title": "Compile & upload your HTML-code to your AVR Microcontroller"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "HTML-as-programming-language",
+            "properties": {
+                "htmlc.trace.server": {
+                    "scope": "window",
+                    "type": "string",
+                    "enum": [
+                        "off",
+                        "messages",
+                        "verbose"
+                    ],
+                    "default": "verbose",
+                    "description": "Traces the communication between VS Code and the language server."
+                }
+            }
+        },
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "htmlc-view",
+                    "title": "HTML-as-programming-language",
+                    "icon": "resources/activitybar-icon.svg"
+                }
+            ]
+        },
+        "views": {
+            "htmlc-view": [
+                {
+                    "id": "htmlc-actions",
+                    "name": "Actions"
+                },
+                {
+                    "id": "htmlc-wiki",
+                    "name": "Wiki"
+                }
+            ]
+        }
+        
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.21",
+        "tslint": "^5.8.0",
+        "@types/node": "^8.10.25",
+        "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "vscode-languageclient": "^5.1.0"
+    }
+}
