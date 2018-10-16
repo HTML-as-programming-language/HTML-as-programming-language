@@ -1,9 +1,8 @@
 import subprocess
 import sys
 
-from colorama import Fore, Style
+from colorama import Fore, Style, Back
 from htmlc import utils
-from pyavrutils import AvrGcc, AvrGccCompileError
 
 from htmlc.gcc import GCC
 
@@ -11,49 +10,64 @@ from htmlc.gcc import GCC
 class AVR(GCC):
 
     def __init__(self, mcu):
-        self.cc = AvrGcc(mcu)
+        self.mcu = mcu
         self.compiled = False
+        self.optimization = self.__get_optimization_level()
+        self.hexfile = None
+        self.dir = None
 
     def compile(self, filepath):
-        source = open(filepath).read()
-        self.cc.optimization = self.__get_optimization_level()
-        try:
-            self.cc.build(source)
-            self.compiled = True
-        except AvrGccCompileError as e:
-            print(e)
-            # TODO link errors back to HTML element
-            pass
+        # avr-gcc -mmcu=atmega328p avrtest.c -o test.o
+        filename = utils.filename(filepath)
+        self.dir = utils.file_dir(filepath)
+        name = filename[:-2] # remove '.c'
+        subprocess.run([
+            "avr-gcc",
+            "-mmcu=" + self.mcu,
+            filename,
+            "-o", name + ".o"
+        ], cwd=self.dir)
+
+        self.hexfile = name + ".hex"
+        a = subprocess.run([
+            "avr-objcopy",
+            "-j", ".text", "-j", ".data",
+            "-O", "ihex",
+            name + ".o",
+            self.hexfile
+        ], cwd=self.dir)
+        self.compiled = True
 
     def __get_optimization_level(self):
         for arg in sys.argv:
             if len(arg) == 3 and arg.startswith("-O"):
-                level = arg[2:]
-                return int(level) if level.isdigit() else level
-        return 0
+                return arg[2:]
+        return "0"
 
     def upload(self):
         if not self.compiled:
             print(f"{Fore.RED}Could not upload HTML{Style.RESET_ALL}")
             return
 
-        fp = self.cc.output.replace("\\", "/")
         com_port = self.__get_com_port()
 
         if not com_port:
             print(
                 f"{Fore.RED}Please specify the COM port of your AVR device like:\n"
-                f"htmlc my-code.html -upload -P COM3"
+                f"htmlc my-code.html -upload -P COM3{Style.RESET_ALL}"
             )
             return
+
+        # avrdude -c arduino -p atmega328p -P COM3 -U flash:w:test.hex
 
         ran = subprocess.run([
             "avrdude",
             "-c", "arduino",
-            "-p", self.cc.mcu,                  # AVR device
-            f'-U flash:w:"{utils.filename(fp)}"',
-            "-P", com_port
-        ], stderr=subprocess.STDOUT, cwd=utils.file_dir(fp))
+            "-p", self.mcu,
+            "-P", com_port,
+            "-U", f'flash:w:{self.hexfile}'
+        ], cwd=self.dir)
+
 
     def __get_com_port(self):
         for i in range(len(sys.argv)):

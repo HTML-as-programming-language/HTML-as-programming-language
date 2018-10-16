@@ -85,7 +85,7 @@ class Compiler:
                 )
                 f.close()
                 print(f"{Fore.GREEN}C-code saved in {outdir}{outfile}{Style.RESET_ALL}")
-                return True
+            return True
         else:
             print(f"{Fore.RED}Could not transpile to C because HTML-code is invalid{Style.RESET_ALL}")
             return False
