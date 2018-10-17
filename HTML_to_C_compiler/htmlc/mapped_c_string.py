@@ -1,5 +1,7 @@
 import re
 
+from colorama import Back, Style, Fore
+
 from htmlc.code_range import CodeRange
 
 
@@ -60,7 +62,15 @@ class MappedCString:
             char = int(err.split(":")[1])
             element = self.find_element(line, char)
 
-            print(element, err)
+            print(
+                f"{Back.RED}[ERROR]{Style.RESET_ALL} "
+                f"{Fore.RED}A {Back.WHITE}{Fore.RED}<{element.tagname}>{Style.RESET_ALL}{Fore.RED} element"
+                f" in {element.code_range.filename} on line {element.code_range.line}"
+                f" at char {element.code_range.char}\n"
+                f"caused an error while compiling it with GCC:{Style.RESET_ALL}\n"
+                +
+                filename + err
+            )
 
     def find_element(self, line, char):
         for cont in self.contributors:
