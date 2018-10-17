@@ -1,6 +1,5 @@
 from htmlc.diagnostics import Diagnostic, Severity
 from htmlc.elements.element import Element
-from htmlc.utils import indent
 
 
 class Expression(Element):
@@ -46,29 +45,43 @@ class Expression(Element):
             "Expression element without x attribute"
         )]
 
-    def to_c(self):
+    def to_c(self, mapped_c):
         # 'if' body:
-        c = "if ({})".format(self.x) + " {\n"
+        mapped_c.add(
+            f"if ({self.x})" + " {\n",
+            self
+        )
+        mapped_c.indent(1)
         for child in self.children:
             if not isinstance(child, YaReally):
                 continue
-            c += indent(child.to_c(), 1)
-        c += "\n}"
+            child.to_c(mapped_c)
+        mapped_c.indent(-1)
+        mapped_c.add("}\n", self)
 
         # 'else-if' bodies:
-        c += "\n".join(
-            [child.to_c() for child in self.children if isinstance(child, Maybe)]
-        )
+        for child in self.children:
+            if isinstance(child, Maybe):
+                child.to_c(mapped_c)
 
         # 'else' body:
-        c += "\n".join(
-            [child.to_c() for child in self.children if isinstance(child, NoWai)]
-            [:1]  # max 1 else-body
+        mapped_c.add(
+            "else {\n",
+            self
         )
-        return c
+        mapped_c.indent(1)
+        for child in self.children:
+            if isinstance(child, NoWai):
+                child.to_c(mapped_c)
+                break
+        mapped_c.indent(-1)
+        mapped_c.add("}\n", self)
 
 
 class ExpressionChild(Element):
+
+    def to_c(self, mapped_c):
+        self.children_to_c(mapped_c)
 
     def diagnostics(self):
         return [] if isinstance(self.parent, Expression) else [
@@ -81,9 +94,7 @@ class ExpressionChild(Element):
 
 
 class YaReally(ExpressionChild):
-
-    def to_c(self):
-        return self.children_to_c()
+    pass
 
 
 class Maybe(ExpressionChild):
@@ -105,15 +116,13 @@ class Maybe(ExpressionChild):
             ))
         return d
 
-    def to_c(self):
-        return " else if ({})".format(self.x) + " {\n" + (
-
-            indent(self.children_to_c(), 1)
-
-        ) + "}"
+    def to_c(self, mapped_c):
+        mapped_c.add(f"else if ({self.x})" + " {\n", self)
+        mapped_c.indent(1)
+        self.children_to_c(mapped_c)
+        mapped_c.indent(-1)
+        mapped_c.add("}\n\n", self)
 
 
 class NoWai(ExpressionChild):
-
-    def to_c(self):
-        return " else {\n" + indent(self.children_to_c(), 1) + "}\n"
+    pass

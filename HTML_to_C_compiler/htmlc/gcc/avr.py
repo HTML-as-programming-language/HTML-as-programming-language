@@ -1,10 +1,10 @@
 import subprocess
 import sys
 
-from colorama import Fore, Style, Back
+from colorama import Fore, Style
 from htmlc import utils
 
-from htmlc.gcc import GCC
+from htmlc.gcc.gcc import GCC
 
 
 class AVR(GCC):
@@ -12,37 +12,33 @@ class AVR(GCC):
     def __init__(self, mcu):
         self.mcu = mcu
         self.compiled = False
-        self.optimization = self.__get_optimization_level()
         self.hexfile = None
         self.dir = None
 
     def compile(self, filepath):
-        # avr-gcc -mmcu=atmega328p avrtest.c -o test.o
         filename = utils.filename(filepath)
         self.dir = utils.file_dir(filepath)
         name = filename[:-2] # remove '.c'
-        subprocess.run([
+        proc = subprocess.run([
             "avr-gcc",
             "-mmcu=" + self.mcu,
             filename,
             "-o", name + ".o"
-        ], cwd=self.dir)
+        ], cwd=self.dir, stderr=subprocess.PIPE)
+
+        if proc.returncode:
+            self.handle_errors(proc.stderr)
+            return
 
         self.hexfile = name + ".hex"
-        a = subprocess.run([
+        proc = subprocess.run([
             "avr-objcopy",
             "-j", ".text", "-j", ".data",
             "-O", "ihex",
             name + ".o",
             self.hexfile
         ], cwd=self.dir)
-        self.compiled = True
-
-    def __get_optimization_level(self):
-        for arg in sys.argv:
-            if len(arg) == 3 and arg.startswith("-O"):
-                return arg[2:]
-        return "0"
+        self.compiled = not proc.returncode
 
     def upload(self):
         if not self.compiled:
@@ -58,9 +54,7 @@ class AVR(GCC):
             )
             return
 
-        # avrdude -c arduino -p atmega328p -P COM3 -U flash:w:test.hex
-
-        ran = subprocess.run([
+        subprocess.run([
             "avrdude",
             "-c", "arduino",
             "-p", self.mcu,

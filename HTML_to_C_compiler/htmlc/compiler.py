@@ -5,12 +5,13 @@ import colorama
 from colorama import Fore, Style, Back
 
 from htmlc import utils
-from htmlc.avr import AVR
-from htmlc.gcc import GCC
+from htmlc.gcc.avr import AVR
+from htmlc.gcc.gcc import GCC
 from htmlc.html_parser import HTMLParser
 from htmlc.diagnostics import diagnose, contains_error
 from htmlc.lexer import Lexer
 from htmlc.linker import Linker
+from htmlc.mapped_c_string import MappedCString
 
 """
 On Windows, calling init() will filter ANSI escape sequences out of any text sent to stdout or stderr, 
@@ -63,12 +64,10 @@ class Compiler:
         """
         Will return C code based on the Element tree
         """
-        c = ""
+        mapped_c = MappedCString()
         for el in self.element_tree:
-            el_c = el.to_c()
-            if el_c:
-                c += el_c
-        return c
+            el.to_c(mapped_c)
+        return mapped_c.c
 
     def save_to_c_file(self):
         if not contains_error(self.diagnostics):
@@ -119,7 +118,7 @@ if __name__ == "__main__":
     if "-P" not in sys.argv:
         sys.argv.extend(["-P", "COM3"])     # lol set default AVR upload port to COM3
     if compiler.save_to_c_file():
-        compiler.avr_gcc_and_upload()
+        compiler.gcc()
 
 
 def main():

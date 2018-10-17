@@ -2,7 +2,7 @@
     "name": "html-as-programming-language",
     "displayName": "HTML-as-programming-language",
     "description": "wip",
-    "version": "0.5.0",
+    "version": "0.6.0",
     "publisher": "HTML-as-programming-language",
     "repository": "https://github.com/HTML-as-programming-language/HTML-as-programming-language",
     "engines": {
@@ -72,7 +72,6 @@
                 }
             ]
         }
-        
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
