@@ -28,6 +28,7 @@ class Compiler:
         self.outdir = None
         self.outfile = None
         self.diagnostics = None
+        self.mapped_c = None
         self.lexer = Lexer(self.dir, self.filename)
         parser = HTMLParser()
 
@@ -64,10 +65,10 @@ class Compiler:
         """
         Will return C code based on the Element tree
         """
-        mapped_c = MappedCString()
+        self.mapped_c = MappedCString()
         for el in self.element_tree:
-            el.to_c(mapped_c)
-        return mapped_c.c
+            el.to_c(self.mapped_c)
+        return self.mapped_c.c
 
     def save_to_c_file(self):
         if not contains_error(self.diagnostics):
@@ -97,7 +98,7 @@ class Compiler:
             # default GCC
             gcc_compiler = GCC()
 
-        gcc_compiler.compile(self.outdir + self.outfile)
+        gcc_compiler.compile(self.outdir + self.outfile, self.mapped_c)
         return gcc_compiler
 
     def avr_gcc_and_upload(self):

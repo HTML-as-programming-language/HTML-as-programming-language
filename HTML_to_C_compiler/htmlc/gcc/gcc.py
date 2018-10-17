@@ -1,10 +1,7 @@
 
 class GCC:
 
-    def compile(self, filepath):
+    def compile(self, filepath, mapped_c):
         pass        # todo
 
-    def handle_errors(self, stderr):
-        stderr = stderr.decode("utf-8")
-        print(stderr)
 

@@ -1,3 +1,5 @@
+import re
+
 from htmlc.code_range import CodeRange
 
 
@@ -44,3 +46,23 @@ class MappedCString:
 
     def indent(self, tabs):
         self.indentation += tabs
+
+    def print_gcc_errors(self, stderr, filename):
+        stderr = stderr.decode("utf-8")
+        errors = stderr.split(filename + ":")
+        for err in errors:
+
+            if not re.match("\d+:\d+:", err):
+                # error message does not begin with line:char:
+                continue
+
+            line = int(err.split(":")[0])
+            char = int(err.split(":")[1])
+            element = self.find_element(line, char)
+
+            print(element, err)
+
+    def find_element(self, line, char):
+        for cont in self.contributors:
+            if cont.code_range.in_range(line, char):
+                return cont.element

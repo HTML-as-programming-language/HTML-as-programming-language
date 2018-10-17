@@ -19,3 +19,36 @@ class CodeRange:
                 "character": self.endchar
             }
         }
+
+    def in_range(self, line, char=None, filename=None, filedir=None):
+        return (
+            self.line <= line <= self.endline
+            and
+            (
+                not char
+                or
+                (
+                    line > self.line
+                    or
+                    char >= self.char
+                )
+                or
+                (
+                    line < self.endline
+                    or
+                    char <= self.endchar
+                )
+            )
+            and
+            (
+                not filename
+                or
+                filename == self.filename
+            )
+            and
+            (
+                not filedir
+                or
+                filedir == self.dir
+            )
+        )

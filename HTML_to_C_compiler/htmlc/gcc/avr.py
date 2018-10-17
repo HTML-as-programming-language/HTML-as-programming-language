@@ -15,10 +15,10 @@ class AVR(GCC):
         self.hexfile = None
         self.dir = None
 
-    def compile(self, filepath):
+    def compile(self, filepath, mapped_c):
         filename = utils.filename(filepath)
         self.dir = utils.file_dir(filepath)
-        name = filename[:-2] # remove '.c'
+        name = filename[:-2]    # remove '.c'
         proc = subprocess.run([
             "avr-gcc",
             "-mmcu=" + self.mcu,
@@ -27,7 +27,7 @@ class AVR(GCC):
         ], cwd=self.dir, stderr=subprocess.PIPE)
 
         if proc.returncode:
-            self.handle_errors(proc.stderr)
+            mapped_c.print_gcc_errors(proc.stderr, filename)
             return
 
         self.hexfile = name + ".hex"
