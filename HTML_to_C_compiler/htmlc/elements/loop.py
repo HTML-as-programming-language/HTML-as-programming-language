@@ -11,7 +11,7 @@ class Loop(Element):
     for(int i=0; i<=5; i+=1) { ... }
     """
 
-    def to_c(self):
+    def to_c(self, mapped_c):
 
         # var_from = 0 + self.attributes["from"]
         from_type = self.attributes.get("from", {}).get("type", "int")
@@ -23,12 +23,11 @@ class Loop(Element):
         step_type = self.attributes.get("step", {}).get("type", "int")
         step_value = self.attributes.get("step", {}).get("val", 1)   # the default is i++
 
-        c = "\n\nfor({} i={}; i<{}; i+={})".format(
-            from_type, from_value,
-            to_value,
-            step_value
-        ) + " {\n"
-
-        c += self.children_to_c()
-        c += "}\n"
-        return c
+        mapped_c.add(
+            f"\nfor({from_type} i={from_value}; i<{to_value}; i+={step_value})" + " {\n",
+            self
+        )
+        mapped_c.indent(1)
+        self.children_to_c(mapped_c)
+        mapped_c.indent(-1)
+        mapped_c.add("\n}\n\n", self)

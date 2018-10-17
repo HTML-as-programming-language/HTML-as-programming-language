@@ -114,7 +114,7 @@ class Compiler:
 
 # for debugging purposes:
 if __name__ == "__main__":
-    compiler = Compiler("../../avrtest.html")
+    compiler = Compiler("../../working-code.html")
     if "-P" not in sys.argv:
         sys.argv.extend(["-P", "COM3"])     # lol set default AVR upload port to COM3
     if compiler.save_to_c_file():

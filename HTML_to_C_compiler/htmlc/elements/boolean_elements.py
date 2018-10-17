@@ -16,12 +16,8 @@ class Truth(Element):
             "Please provide bool name like: <truth>i-am-an-idiot</truth>"
         )]
 
-    def to_c(self):
-        return "bool {} = true;\n".format(
-            hyphenated_to_camel_case(
-                "".join(self.data.split())
-            )
-        )
+    def to_c(self, mapped_c):
+        mapped_c.add(f"bool {self.data} = true;\n", self)
 
 
 class Lie(Element):
@@ -37,9 +33,5 @@ class Lie(Element):
             "Please provide bool name like: <lie>i-am-smart</lie>"
         )]
 
-    def to_c(self):
-        return "bool {} = false;\n".format(
-            hyphenated_to_camel_case(
-                "".join(self.data.split())
-            )
-        )
+    def to_c(self, mapped_c):
+        mapped_c.add(f"bool {self.data} = false;\n", self)
