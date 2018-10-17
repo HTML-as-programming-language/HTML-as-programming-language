@@ -7,5 +7,5 @@ class C(Element):
     HTML: <c>c-code</c>
     C: ..........
     """
-    def to_c(self):
-        return remove_indentation(self.data + "\n")
+    def to_c(self, mapped_c):
+        mapped_c.add(self.data, self)

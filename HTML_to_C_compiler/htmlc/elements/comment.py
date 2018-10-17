@@ -7,5 +7,5 @@ class Comment(Element):
     C: // this is a comment
     """
 
-    def to_c(self):
-        return "//" + self.attributes.get("text", "").replace("\n", "\n// ") + "\n"
+    def to_c(self, mapped_c):
+        mapped_c.add("//" + self.attributes.get("text", "").replace("\n", "\n// ") + "\n", self)

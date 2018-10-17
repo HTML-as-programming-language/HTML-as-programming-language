@@ -51,6 +51,8 @@ def filename(filepath):
 
 
 def split_preserve_substrings(string, separator):
+    if len(string) == 0:
+        return [""]
     splitted = []
     in_sub_string = False
     opening_char = None

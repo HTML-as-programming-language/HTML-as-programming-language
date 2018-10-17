@@ -11,7 +11,7 @@ class FunctionCall(Element):
     C: funcname(param1, param2, etc..)
     """
 
-    def to_c(self):
+    def to_c(self, mapped_c):
 
         params = []
         # get params:
@@ -19,15 +19,13 @@ class FunctionCall(Element):
             if el.tagname == "param":
                 params.append(el.data.strip())
 
-        lineToReturn = "{}({})".format(  # for example: multiply(4, 5)
+        line = "{}({})".format(  # for example: multiply(4, 5)
             self.tagname,
             ", ".join([param for param in params]))
 
+        # if this functioncall is not a child of a functioncall, add a semicolon
+        if not (isinstance(self.parent, FunctionCall)):
+            line += ";"
 
-        if not (isinstance(self.parent, FunctionCall)): #if this functioncall is not a child of a functioncall, add a semicolon (;)
-            lineToReturn += ";"
-
-        lineToReturn += "\n" #add return to the end of the line
-
-        return (lineToReturn)
+        mapped_c.add(line + "\n", self)
 

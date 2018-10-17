@@ -51,12 +51,11 @@ class Var(Element):
             ))
         return d
 
-
-    def to_c(self):
+    def to_c(self, mapped_c):
         val = self.attr["val"]
         if self.type == "String":
             val = '"{}"'.format(val)
         elif self.type == "char":
             val = "'{}'".format(val)
 
-        return "{} {} = {};\n".format(self.type, self.var_name, val)
+        mapped_c.add(f"{self.type} {self.var_name} = {val};\n", self)

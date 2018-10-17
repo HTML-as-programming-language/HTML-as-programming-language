@@ -10,8 +10,7 @@ setup(
     long_description=open('README.txt').read(),
     packages=find_packages(),
     install_requires=[
-        "colorama",      # used to print with colors
-        "pyavrutils"
+        "colorama"      # used to print with colors
     ],
     entry_points={
         'console_scripts': [

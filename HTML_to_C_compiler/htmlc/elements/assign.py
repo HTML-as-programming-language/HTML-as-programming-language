@@ -35,5 +35,5 @@ class Assign(Element):
             )
         return d
 
-    def to_c(self):
-        return "{} = {};\n".format(self.var_name, self.data.strip())
+    def to_c(self, mapped_c):
+        mapped_c.add(f"{self.var_name} = {self.data.strip()};\n", self)

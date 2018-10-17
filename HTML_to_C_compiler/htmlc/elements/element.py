@@ -23,14 +23,9 @@ class Element:
         """
         return []
 
-    def to_c(self):
-        return ""
+    def to_c(self, mapped_c):
+        pass
 
-    def children_to_c(self):
-        c = ""
+    def children_to_c(self, mapped_c):
         for el in self.children:
-            el_c = el.to_c()
-            if el_c:
-                c += el_c
-
-        return c
+            el.to_c(mapped_c)

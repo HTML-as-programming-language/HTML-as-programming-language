@@ -7,5 +7,5 @@ class Return(Element):
     C: return 5;
     """
 
-    def to_c(self):
-        return "return {};\n".format(self.data.strip())
+    def to_c(self, mapped_c):
+        mapped_c.add(f"return {self.data.strip()};\n", self)
