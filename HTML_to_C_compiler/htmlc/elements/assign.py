@@ -22,13 +22,7 @@ class Assign(Element):
         for key in self.attributes:
             self.var_name = key
 
-        if self.data:
-            self.val = self.data.strip()
-        else:
-            for el in self.children:
-                if el.is_value:
-                    self.val = el
-                    break
+        self.val = self.get_inner_value()
 
     def diagnostics(self):
         d = []

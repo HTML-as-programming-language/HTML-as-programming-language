@@ -62,12 +62,12 @@ class Var(Element):
         mapped_c.add(f"{self.type} {self.var_name}", self)
 
         if not val:
-            for el in self.children:
-                if el.is_value:
-                    mapped_c.add(" = ", self)
-                    el.to_c(mapped_c)
-                    break
-        else:
+            val = self.get_inner_value()
+
+        if isinstance(val, Element):
+            mapped_c.add(" = ", self)
+            val.to_c(mapped_c)
+        elif val:
             mapped_c.add(f" = {val}", self)
 
         mapped_c.add(";\n", self)

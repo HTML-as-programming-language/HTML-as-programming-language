@@ -36,3 +36,10 @@ class Element:
     def children_to_c(self, mapped_c):
         for el in self.children:
             el.to_c(mapped_c)
+
+    def get_inner_value(self):
+        for el in self.children:
+            if el.is_value:
+                return el
+
+        return self.data.strip()

@@ -1,4 +1,4 @@
-from htmlc.elements.have import Have
+from htmlc.elements.pile_elements.have import Have
 
 from htmlc.code_range import CodeRange
 from htmlc.diagnostics import Diagnostic, Severity
@@ -12,7 +12,8 @@ from htmlc.elements.function import Def, Param
 from htmlc.elements.function_call import FunctionCall
 from htmlc.elements.link import Link, Script
 from htmlc.elements.loop import Loop
-from htmlc.elements.pile import Pile, Thing
+from htmlc.elements.pile_elements.pile import Pile, Thing
+from htmlc.elements.pile_elements.upgrade import Upgrade
 from htmlc.elements.return_element import Return
 from htmlc.elements.var import Var
 from htmlc.html_parser import HTMLParser
@@ -47,6 +48,7 @@ class Lexer(HTMLParser.Handler):
             Truth,      # <truth>x</truth>
             Lie,
             Have,
+            Upgrade,
             Loop,
             C,
             Assembly,
