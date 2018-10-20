@@ -10,6 +10,7 @@ from htmlc.elements.function import Def, Param
 from htmlc.elements.function_call import FunctionCall
 from htmlc.elements.link import Link, Script
 from htmlc.elements.loop import Loop
+from htmlc.elements.pile import Pile, Thing
 from htmlc.elements.return_element import Return
 from htmlc.elements.var import Var
 from htmlc.html_parser import HTMLParser
@@ -52,7 +53,8 @@ class Lexer(HTMLParser.Handler):
             Comment,    # <!-- this is a comment --> OR <comment text="this is a comment"/>
             Link,       # <link type="text/html" href="./include-this-file.html"/>
             Script,      # <script type="text/html" src="./include-this-file.html"/>
-            Expression, YaReally, Maybe, NoWai      # if/else if/else functionality
+            Expression, YaReally, Maybe, NoWai,      # if/else if/else functionality,
+            Pile, Thing     # Arrays
         ]
         self.diagnostics = []
 
