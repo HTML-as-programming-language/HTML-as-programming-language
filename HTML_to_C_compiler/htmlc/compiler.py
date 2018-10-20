@@ -87,7 +87,7 @@ class Compiler:
                 print(f"{Fore.GREEN}C-code saved in {outdir}{outfile}{Style.RESET_ALL}")
             return True
         else:
-            print(f"{Fore.RED}Could not transpile to C because HTML-code is invalid{Style.RESET_ALL}")
+            print(f"{Fore.RED}Could not transpile to C because your HTML-code sucks{Style.RESET_ALL}")
             return False
 
     def gcc(self):
@@ -115,7 +115,7 @@ class Compiler:
 
 # for debugging purposes:
 if __name__ == "__main__":
-    compiler = Compiler("../../working-code.html")
+    compiler = Compiler("../../working-code/piles.html")
     if "-P" not in sys.argv:
         sys.argv.extend(["-P", "COM3"])     # lol set default AVR upload port to COM3
     if compiler.save_to_c_file():

@@ -1,10 +1,17 @@
+<!DOCTYPE avr/atmega328p>
 
-<!-- int myPile[10] = {1, 2, 3}; -->
+<def main>
 
-<pile myPile enormity=10 type=int>
+    <var pileSize=10/>
 
-    <thing>1</thing>
-    <thing>2</thing>
-    <thing>3</thing>
+    <!-- int myPile[10] = {1, 2, 3}; -->
+    <pile myPile enormity=pileSize type=int>
+    
+        <thing>1</thing>
+        <thing>2</thing>
+        <thing>3</thing>
+    
+    </pile>
+        
 
-</pile>
+</def>

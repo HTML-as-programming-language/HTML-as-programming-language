@@ -19,7 +19,8 @@ class Pile(Element):
             if key == "type":
                 self.type = val_type.get("val")
             elif key == "enormity":
-                self.capacity = val_type.get("val")
+                cap = val_type.get("val")
+                self.capacity = int(cap) if cap.isdigit() else cap
             else:
                 self.name = key
 
@@ -47,7 +48,7 @@ class Pile(Element):
                 Severity.ERROR, self.code_range,
                 f"A pile must have a enormity: <pile {self.name} enormity=20 />"
             ))
-        elif self.capacity < len(self.items):
+        elif isinstance(self.capacity, int) and self.capacity < len(self.items):
             d.append(Diagnostic(
                 Severity.ERROR, self.code_range,
                 f"How can {len(self.items)} items go on a pile with an enormity of {self.capacity}?!?!"
@@ -56,9 +57,18 @@ class Pile(Element):
 
     def to_c(self, mapped_c):
         c = f"{self.type} {self.name}[{self.capacity}]"
-        if self.items:
+        if self.items and isinstance(self.capacity, int):
             c += " = {" + ", ".join(self.items) + "}"
         mapped_c.add(
             c + ";\n",
             self
         )
+
+        if self.items and not isinstance(self.capacity, int):
+            i = 0
+            for item in self.items:
+                mapped_c.add(
+                    f"{self.name}[{i}] = {item};\n",
+                    self
+                )
+                i += 1
