@@ -22,6 +22,7 @@ class Var(Element):
         self.type = None
         self.var_name = None
         self.attr = None
+        self.is_value_wrapper = True
 
     def init(self):
         for key in self.attributes:
@@ -58,4 +59,15 @@ class Var(Element):
         elif self.type == "char":
             val = "'{}'".format(val)
 
-        mapped_c.add(f"{self.type} {self.var_name} = {val};\n", self)
+        mapped_c.add(f"{self.type} {self.var_name}", self)
+
+        if not val:
+            val = self.get_inner_value()
+
+        if isinstance(val, Element):
+            mapped_c.add(" = ", self)
+            val.to_c(mapped_c)
+        elif val:
+            mapped_c.add(f" = {val}", self)
+
+        mapped_c.add(";\n", self)

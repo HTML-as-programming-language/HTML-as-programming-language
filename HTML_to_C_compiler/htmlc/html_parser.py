@@ -54,7 +54,7 @@ class HTMLParser:
             html = open(filepath).read()
 
         tags = self.__split_html_by_tags__(html)
-        line = re.split(".+", html)[0].count("\n")  # number of empty lines at top of file
+        line = html.split("<")[0].count("\n")  # number of empty lines at top of file
         char = 0
         next_tag_char = 0
         for tag in tags:
@@ -180,6 +180,7 @@ class HTMLParser:
                     not in_string
                     and not next_char.isspace()
                     and not next_char == "="
+                    and not next_char == "<"
                     and not (in_comment and not opening_of_comment)
                 )
                 if valid_opening_tag:

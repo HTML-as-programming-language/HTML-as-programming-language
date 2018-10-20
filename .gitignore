@@ -1,6 +1,10 @@
 
 # Created by https://www.gitignore.io/api/linux,python,pycharm,visualstudiocode
 
+# GCC
+*.hex
+*.o
+
 ### Linux ###
 *~
 
@@ -61,7 +65,7 @@ cmake-build-*/
 *.iws
 
 # IntelliJ
-out/
+#out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/

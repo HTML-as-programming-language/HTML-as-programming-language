@@ -1,0 +1,44 @@
+<!DOCTYPE avr/atmega328p>
+
+<def main>
+
+    <var pileSize=10/>
+
+    <!-- int myPile[10] = {1, 2, 3}; -->
+    <pile myPile enormity=pileSize type=int>
+    
+        <thing>1</thing>
+        <thing>2</thing>
+        <thing>3</thing>
+    
+    </pile>
+    
+    <var alsoPile type=int*>
+        {1, 2, 3}
+    </var>
+
+    <var thingFromPile type=int>
+        <have nr3 of>myPile</have>
+    </var>
+
+    <assign thingFromPile>
+        <have nr0 of>myPile</have>
+    </assign>
+
+    <var i=3/>
+
+    <assign thingFromPile>
+        <have nr=i of>myPile</have>
+    </assign>
+
+    <upgrade nr0 of=myPile to>1000</upgrade>
+
+    <upgrade nr5 of=myPile to>
+        <have nr0 of>myPile</have>
+    </upgrade>
+
+    <!-- <incr>
+        <have nr=i of>myPile</have>
+    </incr> -->
+
+</def>
