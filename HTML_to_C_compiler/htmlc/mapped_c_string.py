@@ -28,7 +28,7 @@ class MappedCString:
             if line and (i > 0 or self.c.endswith("\n")):
                 lines[i] = "\t" * self.indentation + line
 
-        c = ("\t" * self.indentation + "\n").join(lines)
+        c = "\n".join(lines)
         self.c += c
 
         endline = self.line + len(lines) - 1
