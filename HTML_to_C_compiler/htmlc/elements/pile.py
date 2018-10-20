@@ -5,6 +5,7 @@ from htmlc.elements.element import Element
 class Thing(Element):
     pass
 
+
 class Pile(Element):
 
     def __init__(self):

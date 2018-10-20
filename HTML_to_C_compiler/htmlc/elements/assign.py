@@ -5,15 +5,30 @@ from htmlc.elements.element import Element
 class Assign(Element):
     """"
     HTML: <assign a>5</assign>
-    C: a = 5
+    C: a = 5;
+
+    or
+
+    HTML: <assign a><have nr0 of>myPile</have></assign>
+    C: a = myPile[0];
     """
     def __init__(self):
         super().__init__()
         self.var_name = None
+        self.is_value_wrapper = True
+        self.val = None
 
     def init(self):
         for key in self.attributes:
             self.var_name = key
+
+        if self.data:
+            self.val = self.data.strip()
+        else:
+            for el in self.children:
+                if el.is_value:
+                    self.val = el
+                    break
 
     def diagnostics(self):
         d = []
@@ -22,10 +37,10 @@ class Assign(Element):
                 Diagnostic(
                     Severity.ERROR,
                     self.code_range,
-                    "No variable name given (for example: <assign var-name>123</assign>)"
+                    "No variable name given (for example: <assign varName>123</assign>)"
                 )
             )
-        elif not self.data:
+        elif not self.val:
             d.append(
                 Diagnostic(
                     Severity.ERROR,
@@ -36,4 +51,9 @@ class Assign(Element):
         return d
 
     def to_c(self, mapped_c):
-        mapped_c.add(f"{self.var_name} = {self.data.strip()};\n", self)
+        mapped_c.add(f"{self.var_name} = ", self)
+        if isinstance(self.val, Element):
+            self.val.to_c(mapped_c)
+        else:
+            mapped_c.add(self.val, self)
+        mapped_c.add(";\n", self)

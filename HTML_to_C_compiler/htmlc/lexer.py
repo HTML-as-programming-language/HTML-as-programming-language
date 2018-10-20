@@ -1,3 +1,5 @@
+from htmlc.elements.have import Have
+
 from htmlc.code_range import CodeRange
 from htmlc.diagnostics import Diagnostic, Severity
 from htmlc.elements.assembly import Assembly
@@ -41,10 +43,11 @@ class Lexer(HTMLParser.Handler):
         self.elements = []
         self.element_classes = [
             Var,        # <var a=5/>
+            Assign,
             Truth,      # <truth>x</truth>
             Lie,
+            Have,
             Loop,
-            Assign,
             C,
             Assembly,
             Def,        # <def functionname></def>

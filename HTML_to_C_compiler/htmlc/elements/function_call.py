@@ -11,6 +11,11 @@ class FunctionCall(Element):
     C: funcname(param1, param2, etc..)
     """
 
+    def __init__(self):
+        super().__init__()
+        self.is_value_wrapper = True
+        self.is_value = True
+
     def to_c(self, mapped_c):
 
         params = []
@@ -19,13 +24,12 @@ class FunctionCall(Element):
             if el.tagname == "param":
                 params.append(el.data.strip())
 
-        line = "{}({})".format(  # for example: multiply(4, 5)
+        c = "{}({})".format(  # for example: multiply(4, 5)
             self.tagname,
             ", ".join([param for param in params]))
 
-        # if this functioncall is not a child of a functioncall, add a semicolon
-        if not (isinstance(self.parent, FunctionCall)):
-            line += ";"
+        if not self.parent.is_value_wrapper:
+            c += ";\n"
 
-        mapped_c.add(line + "\n", self)
+        mapped_c.add(c, self)
 
