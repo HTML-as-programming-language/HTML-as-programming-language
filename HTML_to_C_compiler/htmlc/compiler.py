@@ -5,6 +5,7 @@ import colorama
 from colorama import Fore, Style, Back
 
 from htmlc import utils
+from htmlc.c_linker import CLinker
 from htmlc.gcc.avr import AVR
 from htmlc.gcc.gcc import GCC
 from htmlc.html_parser import HTMLParser
@@ -38,6 +39,8 @@ class Compiler:
         self.linker = Linker(self.element_tree, parser)
         self.linker.link_external_files()
 
+        self.c_linker = CLinker(self.element_tree, self.lexer.doctype)
+
         self.__init_elements()
         self.__diagnose()
 
@@ -68,11 +71,14 @@ class Compiler:
         self.mapped_c = MappedCString()
         for el in self.element_tree:
             el.to_c(self.mapped_c)
-        return self.mapped_c.c
+
+        c = self.c_linker.get_includes_code() + "\n\n" + self.mapped_c.c
+        return c
 
     def save_to_c_file(self):
         if not contains_error(self.diagnostics):
             self.outdir = outdir = self.dir + "out/"
+            self.c_linker.save_htmlc_files(outdir)
             self.outfile = outfile = self.filename.replace('.html', '.c')
             if not os.path.exists(outdir):
                 os.makedirs(outdir)

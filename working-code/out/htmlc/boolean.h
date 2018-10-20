@@ -6,4 +6,4 @@ lie  = false
 
 typedef enum {
     lie, cake
-} bool;
+} boolean;
