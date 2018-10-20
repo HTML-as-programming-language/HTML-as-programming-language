@@ -82,11 +82,3 @@ def split_preserve_substrings(string, separator):
             )
             prev_i = i
     return splitted
-
-
-#returns the content of a file
-def includeFile(filepath):
-    file = open(filepath, "r")
-    content = file.read()
-    file.close()
-    return content
