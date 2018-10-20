@@ -22,11 +22,12 @@ class MappedCString:
 
     def add(self, c, element):
 
-        lines = [
-            "\t" * self.indentation + line
-            if line else line                   # don't add indent to line without text
-            for line in c.split("\n")
-        ]
+        lines = c.split("\n")
+        for i in range(len(lines)):
+            line = lines[i]
+            if line and (i > 0 or self.c.endswith("\n")):
+                lines[i] = "\t" * self.indentation + line
+
         c = ("\t" * self.indentation + "\n").join(lines)
         self.c += c
 

@@ -28,7 +28,7 @@ class FunctionCall(Element):
             self.tagname,
             ", ".join([param for param in params]))
 
-        if not self.parent.is_value_wrapper:
+        if not self.parent or not self.parent.is_value_wrapper:
             c += ";\n"
 
         mapped_c.add(c, self)

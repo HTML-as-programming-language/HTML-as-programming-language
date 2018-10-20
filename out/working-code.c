@@ -65,4 +65,6 @@ for(int i=2; i<5; i+=2) {
 
 
     // this is c code
-    char thisIsAChar = 'b';// assembly code in here: 
+    char thisIsAChar = 'b';
+
+// assembly code in here: 
