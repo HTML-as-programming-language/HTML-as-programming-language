@@ -42,4 +42,4 @@ class Element:
             if el.is_value:
                 return el
 
-        return self.data.strip()
+        return self.data.strip() if self.data else None
