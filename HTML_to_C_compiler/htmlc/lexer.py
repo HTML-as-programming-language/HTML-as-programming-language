@@ -1,3 +1,4 @@
+from htmlc.elements.avr.pin_elements.digital_read import DigitalRead
 from htmlc.elements.avr.pin_elements.digital_write import DigitalWrite
 from htmlc.elements.avr.pin_elements.pin import Pin
 from htmlc.elements.avr.pin_elements.pin_mode import PinMode
@@ -132,6 +133,7 @@ class Lexer(HTMLParser.Handler):
                 Pin,
                 PinMode,
                 DigitalWrite,
+                DigitalRead
             ])
 
     def handle_invalid_tag(self, line, char, endchar):
