@@ -23,7 +23,8 @@ class AVR(GCC):
             "avr-gcc",
             "-mmcu=" + self.mcu,
             filename,
-            "-o", name + ".o"
+            "-o", name + ".o",
+            "-O3"
         ], cwd=self.dir, stderr=subprocess.PIPE)
 
         if proc.returncode:

@@ -1,3 +1,4 @@
+from htmlc.elements.avr.delay import Delay
 from htmlc.elements.avr.pin_elements.digital_write import DigitalWrite
 from htmlc.elements.avr.pin_elements.pin import Pin
 from htmlc.elements.avr.pin_elements.pin_mode import PinMode
@@ -127,7 +128,8 @@ class Lexer(HTMLParser.Handler):
             self.element_classes.extend([
                 Pin,
                 PinMode,
-                DigitalWrite
+                DigitalWrite,
+                Delay
             ])
 
     def handle_invalid_tag(self, line, char, endchar):
