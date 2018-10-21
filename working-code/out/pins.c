@@ -1,8 +1,8 @@
-#include "htmlc/boolean.h"
 #include "htmlc/avr/digital.c"
+#include "htmlc/boolean.h"
 
 #include <avr/io.h>
-#define F_CPU 16E2
+#define F_CPU 16000000
 #include "util/delay.h"
 
 // pin led:
@@ -20,10 +20,10 @@ void main() {
 	digital_write(&__led_DDR__, __led_BIT_NR__, cake);
 	while (cake) {
 
-		// write <htmlc.elements.pile_elements.have.Have object at 0x0455FD50> to led:
+		// write <htmlc.elements.pile_elements.have.Have object at 0x04AD7DD0> to led:
 		digital_write(&__led_PORT__, __led_BIT_NR__, pattern[i]);
-		rise();
-		_delay_ms(60);
+		i = (i >= 9) ? 0 : (i + 1);
+		_delay_ms(500);
 	}
 }
 

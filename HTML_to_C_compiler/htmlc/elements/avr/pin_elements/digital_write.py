@@ -9,6 +9,9 @@ class DigitalWrite(Element):
         self.val = None
         self.name = None
         self.is_value_wrapper = True
+        self.require_htmlc_includes = [
+            "avr/digital.c"
+        ]
 
     def init(self):
         if not len(self.attributes):

@@ -19,6 +19,7 @@ from htmlc.elements.loop import Loop
 from htmlc.elements.pile_elements.pile import Pile, Thing
 from htmlc.elements.pile_elements.upgrade import Upgrade
 from htmlc.elements.return_element import Return
+from htmlc.elements.rise import Rise
 from htmlc.elements.var import Var
 from htmlc.elements.what_is import WhatIs
 from htmlc.html_parser import HTMLParser
@@ -66,7 +67,8 @@ class Lexer(HTMLParser.Handler):
             Script,      # <script type="text/html" src="./include-this-file.html"/>
             Expression, YaReally, Maybe, NoWai,      # if/else if/else functionality,
             Pile, Thing,     # Arrays
-            WhatIs
+            WhatIs,
+            Rise,
 
             # AVR elements are added when handle_doctype("avr/......") is called
         ]

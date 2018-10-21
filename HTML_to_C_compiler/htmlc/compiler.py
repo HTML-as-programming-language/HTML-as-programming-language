@@ -124,7 +124,7 @@ if __name__ == "__main__":
     if "-P" not in sys.argv:
         sys.argv.extend(["-P", "COM3"])     # lol set default AVR upload port to COM3
     if compiler.save_to_c_file():
-        compiler.gcc()
+        compiler.avr_gcc_and_upload()
 
 
 def main():
