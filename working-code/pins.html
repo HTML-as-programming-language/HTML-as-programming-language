@@ -1,5 +1,9 @@
 <!DOCTYPE avr/atmega328p>
 
+<what-is F_CPU>16E2</what-is>
+
+<link type="text/c" href="util/delay.h"/>
+
 <pin led="D2"/>
 
 <def main>
@@ -26,7 +30,6 @@
         </digital-write>
 
         <rise i max=9/>
-        <delay>50ms</delay>
     </infinity>
 
 </def>

@@ -38,7 +38,7 @@ class Pin(Element):
 
     def to_c(self, mapped_c):
         mapped_c.add(
-            f"// pin {self.name}:\n"
+            f"\n// pin {self.name}:\n"
             f"#define __{self.name}_BIT_NR__ {self.bit_nr}\n"
             f"#define __{self.name}_PORT__ PORT{self.char}\n"
             f"#define __{self.name}_DDR__ DDR{self.char}\n"

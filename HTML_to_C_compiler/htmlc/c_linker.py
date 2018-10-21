@@ -23,17 +23,7 @@ class CLinker:
         for el in elements:
             self.htmlc_includes.update(el.require_htmlc_includes)
             self.includes.update(el.require_includes)
-
-            if not isinstance(el, Link):
-                self.__find_includes(el.children)
-                continue
-
-            if el.link_type() != "text/c":
-                continue
-
-            src = el.src()
-            if src:
-                self.includes.append(src)
+            self.__find_includes(el.children)
 
     def get_includes_code(self):
         c = ""

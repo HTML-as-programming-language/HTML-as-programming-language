@@ -1,4 +1,3 @@
-from htmlc.elements.avr.delay import Delay
 from htmlc.elements.avr.pin_elements.digital_write import DigitalWrite
 from htmlc.elements.avr.pin_elements.pin import Pin
 from htmlc.elements.avr.pin_elements.pin_mode import PinMode
@@ -21,6 +20,7 @@ from htmlc.elements.pile_elements.pile import Pile, Thing
 from htmlc.elements.pile_elements.upgrade import Upgrade
 from htmlc.elements.return_element import Return
 from htmlc.elements.var import Var
+from htmlc.elements.what_is import WhatIs
 from htmlc.html_parser import HTMLParser
 from htmlc.utils import camel_case_to_hyphenated
 
@@ -66,6 +66,7 @@ class Lexer(HTMLParser.Handler):
             Script,      # <script type="text/html" src="./include-this-file.html"/>
             Expression, YaReally, Maybe, NoWai,      # if/else if/else functionality,
             Pile, Thing,     # Arrays
+            WhatIs
 
             # AVR elements are added when handle_doctype("avr/......") is called
         ]
@@ -129,7 +130,6 @@ class Lexer(HTMLParser.Handler):
                 Pin,
                 PinMode,
                 DigitalWrite,
-                Delay
             ])
 
     def handle_invalid_tag(self, line, char, endchar):
