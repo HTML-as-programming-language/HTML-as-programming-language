@@ -1,10 +1,11 @@
+from htmlc.elements.infinity import Infinity
 from htmlc.elements.pile_elements.have import Have
 
 from htmlc.code_range import CodeRange
 from htmlc.diagnostics import Diagnostic, Severity
 from htmlc.elements.assembly import Assembly
 from htmlc.elements.assign import Assign
-from htmlc.elements.boolean_elements import Truth, Lie
+from htmlc.elements.boolean_elements import Cake, Lie
 from htmlc.elements.c import C
 from htmlc.elements.comment import Comment
 from htmlc.elements.expression import Expression, YaReally, Maybe, NoWai
@@ -45,11 +46,12 @@ class Lexer(HTMLParser.Handler):
         self.element_classes = [
             Var,        # <var a=5/>
             Assign,
-            Truth,      # <truth>x</truth>
+            Cake,      # <truth>x</truth>
             Lie,
             Have,
             Upgrade,
             Loop,
+            Infinity,
             C,
             Assembly,
             Def,        # <def functionname></def>

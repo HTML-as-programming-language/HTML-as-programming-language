@@ -69,11 +69,10 @@ class Compiler:
         Will return C code based on the Element tree
         """
         self.mapped_c = MappedCString()
+        self.mapped_c.add(self.c_linker.get_includes_code(), None)
         for el in self.element_tree:
             el.to_c(self.mapped_c)
-
-        c = self.c_linker.get_includes_code() + "\n\n" + self.mapped_c.c
-        return c
+        return self.mapped_c.c
 
     def save_to_c_file(self):
         if not contains_error(self.diagnostics):
@@ -121,7 +120,7 @@ class Compiler:
 
 # for debugging purposes:
 if __name__ == "__main__":
-    compiler = Compiler("../../working-code/piles.html")
+    compiler = Compiler("../../working-code/pins.html")
     if "-P" not in sys.argv:
         sys.argv.extend(["-P", "COM3"])     # lol set default AVR upload port to COM3
     if compiler.save_to_c_file():
