@@ -1,0 +1,17 @@
+<!DOCTYPE avr/atmega328p>
+
+<pin myButton="B0"/>
+<pin myLed="B1"/>
+
+<def main>
+
+    <pin-mode myButton="input"/>
+    <pin-mode myLed="output"/>
+
+    <infinity>
+        <digital-write myLed>
+            <digital-read myButton/>
+        </digital-write>
+    </infinity>
+
+</def>

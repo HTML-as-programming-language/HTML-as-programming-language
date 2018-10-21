@@ -26,7 +26,7 @@ class Pile(Element):
                 self.name = key
 
         for child in self.children:
-            if isinstance(child, Thing):
+            if isinstance(child, Thing) and child.data:
                 self.items.append(child.data.strip().replace("\n", ""))
 
         if not self.capacity and len(self.items):

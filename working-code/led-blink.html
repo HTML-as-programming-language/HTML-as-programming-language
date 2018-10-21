@@ -1,0 +1,37 @@
+<!DOCTYPE avr/atmega328p>
+
+<what-is F_CPU>16000000</what-is>
+
+<link type="text/c" href="util/delay.h"/>
+
+<pin led="D2"/>
+
+<def main>
+        
+    <pile pattern type=boolean>
+        <thing>cake</thing>
+        <thing>cake</thing>
+        <thing>lie</thing>
+        <thing>cake</thing>
+        <thing>lie</thing>
+        <thing>cake</thing>
+        <thing>lie</thing>
+        <thing>lie</thing>
+        <thing>cake</thing>
+        <thing>lie</thing>
+    </pile>
+    <var i=0/>
+
+    <pin-mode led="output"/>
+    <infinity>
+        
+        <digital-write led>
+            <have nr=i of>pattern</have>
+        </digital-write>
+
+        <rise i max=9/>
+
+        <_delay_ms>500</_delay_ms>
+    </infinity>
+
+</def>

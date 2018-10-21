@@ -18,7 +18,7 @@ class Param(Element):
                 break
 
     def diagnostics(self):
-        return [] if self.type else [Diagnostic(
+        return [] if self.type or not isinstance(self.parent, Def) else [Diagnostic(
             Severity.ERROR,
             self.code_range,
             "Unkown param type"

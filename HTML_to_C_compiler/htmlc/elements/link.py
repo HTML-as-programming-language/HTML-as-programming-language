@@ -9,6 +9,10 @@ class Link(Element):
     """
 
     def to_c(self, mapped_c):
+        src = self.src()
+        if self.link_type() == "text/c" and src:
+            mapped_c.add(f'#include "{src}"\n', self)
+
         self.children_to_c(mapped_c)
 
     def diagnostics(self):
@@ -17,6 +21,12 @@ class Link(Element):
                 Severity.ERROR,
                 self.code_range,
                 f"Found {self.tagname} element without {self.src_attr_name()} attribute"
+            )]
+        if not self.link_type():
+            return [Diagnostic(
+                Severity.WARNING,
+                self.code_range,
+                f"{self.tagname} elements without type attribute are ignored."
             )]
         return []
 

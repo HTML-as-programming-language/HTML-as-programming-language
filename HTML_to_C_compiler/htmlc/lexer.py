@@ -1,10 +1,15 @@
+from htmlc.elements.avr.pin_elements.digital_read import DigitalRead
+from htmlc.elements.avr.pin_elements.digital_write import DigitalWrite
+from htmlc.elements.avr.pin_elements.pin import Pin
+from htmlc.elements.avr.pin_elements.pin_mode import PinMode
+from htmlc.elements.infinity import Infinity
 from htmlc.elements.pile_elements.have import Have
 
 from htmlc.code_range import CodeRange
 from htmlc.diagnostics import Diagnostic, Severity
 from htmlc.elements.assembly import Assembly
 from htmlc.elements.assign import Assign
-from htmlc.elements.boolean_elements import Truth, Lie
+from htmlc.elements.boolean_elements import Cake, Lie
 from htmlc.elements.c import C
 from htmlc.elements.comment import Comment
 from htmlc.elements.expression import Expression, YaReally, Maybe, NoWai
@@ -15,7 +20,9 @@ from htmlc.elements.loop import Loop
 from htmlc.elements.pile_elements.pile import Pile, Thing
 from htmlc.elements.pile_elements.upgrade import Upgrade
 from htmlc.elements.return_element import Return
+from htmlc.elements.rise import Rise
 from htmlc.elements.var import Var
+from htmlc.elements.what_is import WhatIs
 from htmlc.html_parser import HTMLParser
 from htmlc.utils import camel_case_to_hyphenated
 
@@ -45,11 +52,12 @@ class Lexer(HTMLParser.Handler):
         self.element_classes = [
             Var,        # <var a=5/>
             Assign,
-            Truth,      # <truth>x</truth>
+            Cake,      # <truth>x</truth>
             Lie,
             Have,
             Upgrade,
             Loop,
+            Infinity,
             C,
             Assembly,
             Def,        # <def functionname></def>
@@ -59,7 +67,11 @@ class Lexer(HTMLParser.Handler):
             Link,       # <link type="text/html" href="./include-this-file.html"/>
             Script,      # <script type="text/html" src="./include-this-file.html"/>
             Expression, YaReally, Maybe, NoWai,      # if/else if/else functionality,
-            Pile, Thing     # Arrays
+            Pile, Thing,     # Arrays
+            WhatIs,
+            Rise,
+
+            # AVR elements are added when handle_doctype("avr/......") is called
         ]
         self.diagnostics = []
 
@@ -116,6 +128,13 @@ class Lexer(HTMLParser.Handler):
 
     def handle_doctype(self, doctype):
         self.doctype = doctype
+        if doctype.startswith("avr/"):
+            self.element_classes.extend([
+                Pin,
+                PinMode,
+                DigitalWrite,
+                DigitalRead
+            ])
 
     def handle_invalid_tag(self, line, char, endchar):
         self.diagnostics.append(Diagnostic(

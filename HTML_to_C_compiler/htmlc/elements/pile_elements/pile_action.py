@@ -22,7 +22,7 @@ class PileAction(Element):
                 self.nr = self.attributes[ak].get("val") or 0
 
             elif ak == "of":
-                self.of = self.attributes[ak].get("val") or self.data.strip()
+                self.of = self.attributes[ak].get("val") or self.get_inner_value()
 
             elif ak == "to":
                 self.to = self.attributes[ak].get("val") or self.get_inner_value()

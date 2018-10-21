@@ -3,35 +3,35 @@ from htmlc.elements.element import Element
 from htmlc.utils import hyphenated_to_camel_case
 
 
-class Truth(Element):
+class Cake(Element):
     """"
-    HTML: <truth>x</truth>
-    C: bool x = true;
+    HTML: <cake>x</cale>
+    C: boolean x = cake;
     """
 
     def diagnostics(self):
         return [] if self.data else [Diagnostic(
             Severity.ERROR,
             self.code_range,
-            "Please provide bool name like: <truth>i-am-an-idiot</truth>"
+            "Please provide bool name like: <cake>iAmAnIdiot</cake>"
         )]
 
     def to_c(self, mapped_c):
-        mapped_c.add(f"bool {self.data} = true;\n", self)
+        mapped_c.add(f"boolean {self.data} = cake;\n", self)
 
 
 class Lie(Element):
     """"
     HTML: <lie>y</lie>
-    C: bool y = false;
+    C: boolean y = lie;
     """
 
     def diagnostics(self):
         return [] if self.data else [Diagnostic(
             Severity.ERROR,
             self.code_range,
-            "Please provide bool name like: <lie>i-am-smart</lie>"
+            "Please provide bool name like: <lie>iAmSmart</lie>"
         )]
 
     def to_c(self, mapped_c):
-        mapped_c.add(f"bool {self.data} = false;\n", self)
+        mapped_c.add(f"boolean {self.data} = lie;\n", self)

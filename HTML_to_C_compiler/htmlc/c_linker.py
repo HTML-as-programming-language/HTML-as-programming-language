@@ -13,24 +13,17 @@ ALWAYS_INCLUDE = [
 class CLinker:
 
     def __init__(self, element_tree, doctype):
-        self.htmlc_includes = [*ALWAYS_INCLUDE]
-        self.includes = []
+        self.htmlc_includes = {*ALWAYS_INCLUDE}
+        self.includes = set()
         self.element_tree = element_tree
         self.doctype = doctype
         self.__find_includes(element_tree)
 
     def __find_includes(self, elements):
         for el in elements:
-            if not isinstance(el, Link):
-                self.__find_includes(el.children)
-                continue
-
-            if el.link_type() != "text/c":
-                continue
-
-            src = el.src()
-            if src:
-                self.includes.append(src)
+            self.htmlc_includes.update(el.require_htmlc_includes)
+            self.includes.update(el.require_includes)
+            self.__find_includes(el.children)
 
     def get_includes_code(self):
         c = ""
