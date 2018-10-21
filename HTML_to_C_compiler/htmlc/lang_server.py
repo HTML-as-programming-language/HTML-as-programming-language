@@ -76,6 +76,12 @@ class LanguageServer(JsonRpcServer):
             }
         })
 
+    def shutdown(self, request):
+        self.respond(request, None)
+
+    def exit(self, request):
+        os._exit(0)
+
 
 def main():
     LanguageServer().start()

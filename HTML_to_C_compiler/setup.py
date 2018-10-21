@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='HTML-as-programming-language',
-    version='0.1.17',
+    version='0.1.19',
     author="hilkojj",
     author_email="hilkojj@outlook.com",
     url="https://github.com/HTML-as-programming-language/HTML-as-programming-language",
