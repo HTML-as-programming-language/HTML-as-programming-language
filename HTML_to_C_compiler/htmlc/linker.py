@@ -26,21 +26,13 @@ class Linker:
                 self.__loop_trough_elements__(el.children)
                 continue
 
-            link_type = el.attributes.get("type", {}).get("val")
-            if link_type != "text/html":
+            if el.link_type() != "text/html":
                 continue
 
-            src_attr_name = "src" if el.tagname == "script" else "href"
-            src = el.attributes.get(src_attr_name, {}).get("val")
-            if not src:
-                self.diagnostics.append(Diagnostic(
-                    Severity.ERROR,
-                    el.code_range,
-                    "Found {} element without {} attribute".format(el.tagname, src_attr_name)
-                ))
-                return
-            self.__link__(src, el)
-            self.__loop_trough_elements__(el.children)
+            src = el.src()
+            if src:
+                self.__link__(src, el)
+                self.__loop_trough_elements__(el.children)
 
     def __link__(self, file, link_element):
 
