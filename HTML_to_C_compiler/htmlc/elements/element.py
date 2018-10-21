@@ -15,6 +15,8 @@ class Element:
         self.is_value_wrapper = False       # true if element can wrap values,
                                             # eg: <assign a><have enormity of>myPile</have</assign>
         self.is_value = False               # true if element can be wrapped
+        self.require_htmlc_includes = []
+        self.require_includes = []
 
     def init(self):
         pass
