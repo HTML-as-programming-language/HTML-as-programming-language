@@ -1,3 +1,6 @@
+from htmlc.elements.avr.pin_elements.digital_write import DigitalWrite
+from htmlc.elements.avr.pin_elements.pin import Pin
+from htmlc.elements.avr.pin_elements.pin_mode import PinMode
 from htmlc.elements.infinity import Infinity
 from htmlc.elements.pile_elements.have import Have
 
@@ -61,7 +64,9 @@ class Lexer(HTMLParser.Handler):
             Link,       # <link type="text/html" href="./include-this-file.html"/>
             Script,      # <script type="text/html" src="./include-this-file.html"/>
             Expression, YaReally, Maybe, NoWai,      # if/else if/else functionality,
-            Pile, Thing     # Arrays
+            Pile, Thing,     # Arrays
+
+            # AVR elements are added when handle_doctype("avr/......") is called
         ]
         self.diagnostics = []
 
@@ -118,6 +123,12 @@ class Lexer(HTMLParser.Handler):
 
     def handle_doctype(self, doctype):
         self.doctype = doctype
+        if doctype.startswith("avr/"):
+            self.element_classes.extend([
+                Pin,
+                PinMode,
+                DigitalWrite
+            ])
 
     def handle_invalid_tag(self, line, char, endchar):
         self.diagnostics.append(Diagnostic(

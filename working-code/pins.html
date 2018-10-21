@@ -1,0 +1,32 @@
+<!DOCTYPE avr/atmega328p>
+
+<pin led="D2"/>
+
+<def main>
+        
+    <pile pattern type=boolean>
+        <thing>cake</thing>
+        <thing>cake</thing>
+        <thing>lie</thing>
+        <thing>cake</thing>
+        <thing>lie</thing>
+        <thing>cake</thing>
+        <thing>lie</thing>
+        <thing>lie</thing>
+        <thing>cake</thing>
+        <thing>lie</thing>
+    </pile>
+    <var i=0/>
+
+    <pin-mode led="output"/>
+    <infinity>
+        
+        <digital-write led>
+            <have nr=i of>pattern</have>
+        </digital-write>
+
+        <rise i max=9/>
+        <delay>50ms</delay>
+    </infinity>
+
+</def>

@@ -14,7 +14,7 @@ class CLinker:
 
     def __init__(self, element_tree, doctype):
         self.htmlc_includes = {*ALWAYS_INCLUDE}
-        self.includes = {}
+        self.includes = set()
         self.element_tree = element_tree
         self.doctype = doctype
         self.__find_includes(element_tree)
