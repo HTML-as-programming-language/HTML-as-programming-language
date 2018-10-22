@@ -42,7 +42,6 @@ class Linker:
             return
 
         self.linked.append(path)
-        html = None
         try:
             html = open(path).read()
         except FileNotFoundError:

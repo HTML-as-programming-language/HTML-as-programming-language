@@ -1,3 +1,6 @@
+from htmlc.elements.avr.atmega328p.serial_begin import SerialBegin
+from htmlc.elements.avr.atmega328p.serial_receive import SerialReceive
+from htmlc.elements.avr.atmega328p.serial_transmit import SerialTransmit, SerialPrint
 from htmlc.elements.avr.pin_elements.digital_read import DigitalRead
 from htmlc.elements.avr.pin_elements.digital_write import DigitalWrite
 from htmlc.elements.avr.pin_elements.pin import Pin
@@ -135,6 +138,13 @@ class Lexer(HTMLParser.Handler):
                 DigitalWrite,
                 DigitalRead
             ])
+            if doctype == "avr/atmega328p":
+                self.element_classes.extend([
+                    SerialBegin,
+                    SerialTransmit,
+                    SerialPrint,
+                    SerialReceive
+                ])
 
     def handle_invalid_tag(self, line, char, endchar):
         self.diagnostics.append(Diagnostic(
