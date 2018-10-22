@@ -1,0 +1,17 @@
+<!DOCTYPE avr/atmega328p>
+
+<def main>
+
+    <serial-begin clock-freq="16MHz">9600</serial-begin>
+
+    <serial-print>
+        "I will echo everything you say\n\n"
+    </serial-print>
+
+    <infinity>
+        <serial-transmit>
+            <serial-receive></serial-receive>
+        </serial-transmit>
+    </infinity>
+
+</def>
