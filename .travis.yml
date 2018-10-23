@@ -5,6 +5,9 @@ python:
 
 install:
   - pip install -r requirements.txt
+  - cd HTML_to_C_compiler
+  - python setup.py sdist
+  - pip install sdist/*
 
 script: 
   - pytest
