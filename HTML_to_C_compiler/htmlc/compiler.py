@@ -19,10 +19,7 @@ On Windows, calling init() will filter ANSI escape sequences out of any text sen
 and replace them with equivalent Win32 calls.
 """
 colorama.init()
-
-
 class Compiler:
-
     def __init__(self, filepath):
         self.dir = utils.file_dir(filepath)
         self.filename = utils.filename(filepath)
@@ -31,7 +28,7 @@ class Compiler:
         self.diagnostics = None
         self.mapped_c = None
         self.lexer = Lexer(self.dir, self.filename)
-        parser = HTMLParser()
+        parser=HTMLParser()
 
         parser.feed(self.lexer, filepath=filepath)
         self.element_tree = self.lexer.elements
