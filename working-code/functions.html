@@ -1,5 +1,8 @@
 
-<def multiply returns=int>
+<!-- Note that the function cannot be called multiply
+because there is a built-in tag called multiply -->
+
+<def multiplyFunction returns=int>
     <param a type=int/>
     <param b type=int/>
 
@@ -9,10 +12,10 @@
 <def main>
 
     <var result type=int>
-        <multiply>
+        <multiplyFunction>
             <param>5</param>
             <param>6</param>
-        </multiply>
+        </multiplyFunction>
     </var>
 
 </def>

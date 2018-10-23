@@ -1,8 +1,10 @@
 #include "htmlc/boolean.h"
 
+// Note that the function cannot be called multiply
+// because there is a built-in tag called multiply 
 
 
-int multiply(int a, int b) {
+int multiplyFunction(int a, int b) {
 	return a * b;
 }
 
@@ -10,7 +12,7 @@ int multiply(int a, int b) {
 
 
 void main() {
-	int result = multiply(5, 6);
+	int result = multiplyFunction(5, 6);
 }
 
 
