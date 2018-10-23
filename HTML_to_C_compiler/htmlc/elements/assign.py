@@ -54,7 +54,7 @@ class Assign(Element):
         if isinstance(self.val, Element):
             self.val.to_c(mapped_c)
         else:
-            mapped_c.add(self.val, self)
+            mapped_c.add(f"{self.val}", self)
         mapped_c.add(";\n", self)
 
 
