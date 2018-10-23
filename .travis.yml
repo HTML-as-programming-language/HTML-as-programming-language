@@ -8,6 +8,7 @@ install:
   - cd HTML_to_C_compiler
   - python setup.py sdist
   - pip install dist/*
+  - cd ..
 
 script: 
   - pytest
