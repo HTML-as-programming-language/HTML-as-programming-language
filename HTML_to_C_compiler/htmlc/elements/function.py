@@ -52,7 +52,7 @@ class Def(Element):
             if key != "returns":
                 func_name = hyphenated_to_camel_case(key)
 
-        mapped_c.add(f"\n\n{return_type} {func_name}(", self)
+        mapped_c.add(f"\n{return_type} {func_name}(", self)
 
         first_param = True
         for el in self.children:
@@ -69,4 +69,4 @@ class Def(Element):
         mapped_c.indent(1)
         self.children_to_c(mapped_c)
         mapped_c.indent(-1)
-        mapped_c.add("}\n\n\n", self)
+        mapped_c.add("}\n\n", self)
