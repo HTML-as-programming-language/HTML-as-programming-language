@@ -23,6 +23,7 @@ class Var(Element):
         self.var_name = None
         self.attr = None
         self.is_value_wrapper = True
+        self.prefix = ""
 
     def init(self):
         for key in self.attributes:
@@ -59,7 +60,7 @@ class Var(Element):
         elif self.type == "char":
             val = "'{}'".format(val)
 
-        mapped_c.add(f"{self.type} {self.var_name}", self)
+        mapped_c.add(f"{self.prefix}{self.type} {self.var_name}", self)
 
         if not val:
             val = self.get_inner_value()
@@ -71,3 +72,10 @@ class Var(Element):
             mapped_c.add(f" = {val}", self)
 
         mapped_c.add(";\n", self)
+
+
+class Const(Var):
+
+    def __init__(self):
+        super().__init__()
+        self.prefix = "static const "

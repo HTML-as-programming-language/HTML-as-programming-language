@@ -24,7 +24,7 @@ from htmlc.elements.pile_elements.pile import Pile, Thing
 from htmlc.elements.pile_elements.upgrade import Upgrade
 from htmlc.elements.return_element import Return
 from htmlc.elements.rise import Rise
-from htmlc.elements.var import Var
+from htmlc.elements.var_and_const import Var, Const
 from htmlc.elements.what_is import WhatIs
 from htmlc.html_parser import HTMLParser
 from htmlc.utils import camel_case_to_hyphenated
@@ -53,7 +53,7 @@ class Lexer(HTMLParser.Handler):
         self.current_element = None
         self.elements = []
         self.element_classes = [
-            Var,        # <var a=5/>
+            Var, Const,        # <var a=5/>
             Assign, Add, Minus, AndBits, OrBits, XorBits, Multiply, Divide, Modulo,
             Cake,      # <truth>x</truth>
             Lie,
