@@ -11,7 +11,7 @@ from htmlc.elements.pile_elements.have import Have
 from htmlc.code_range import CodeRange
 from htmlc.diagnostics import Diagnostic, Severity
 from htmlc.elements.assembly import Assembly
-from htmlc.elements.assign import Assign
+from htmlc.elements.assign import *
 from htmlc.elements.boolean_elements import Cake, Lie
 from htmlc.elements.c import C
 from htmlc.elements.comment import Comment
@@ -54,7 +54,7 @@ class Lexer(HTMLParser.Handler):
         self.elements = []
         self.element_classes = [
             Var,        # <var a=5/>
-            Assign,
+            Assign, Add, Minus, AndBits, OrBits, XorBits, Multiply, Divide, Modulo,
             Cake,      # <truth>x</truth>
             Lie,
             Have,
