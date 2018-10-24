@@ -7,6 +7,8 @@ def __caller_name__():
     return traceback.extract_stack(None, 2)[0][-2]
 
 
+# This is a Decorating Method see the link for explanation.
+# https://www.thecodeship.com/patterns/guide-to-python-function-decorators/
 def restore_working_code(func):
     def func_wrapper():
         backup("working-code", func.__name__)

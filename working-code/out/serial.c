@@ -1,3 +1,4 @@
+#include "htmlc/boolean.h"
 #include "htmlc/avr/atmega328p/serial.c"
 #include "htmlc/boolean.h"
 

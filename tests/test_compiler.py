@@ -18,7 +18,7 @@ def test_empty(capsys):
     assert "Please" in captured.out and ".html" in captured.out
 
 
-@enviorment.restore_working_code
+@enviorment.restore_working_code # https://www.thecodeship.com/patterns/guide-to-python-function-decorators/
 def test_working_code_compile():
     """
     Test if the working code folder compiles
@@ -54,7 +54,7 @@ def test_compiler_file_not_found(capsys):
     """
     Test if wrong file paths cause an error
     """
-    @enviorment.restore_working_code
+    @enviorment.restore_working_code # capsys can not be passes so we use a inner function
     def test_compiler_file_not_found_inner():
         items = [
             "http://www.cs.uu.nl/docs/vakken/magr/portfolio/index.html",
