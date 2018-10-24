@@ -18,7 +18,7 @@ def test_empty(capsys):
     assert "Please" in captured.out and ".html" in captured.out
 
 
-@enviorment.restore_working_code # https://www.thecodeship.com/patterns/guide-to-python-function-decorators/
+@enviorment.restore_working_code  # https://www.thecodeship.com/patterns/guide-to-python-function-decorators/
 def test_working_code_compile():
     """
     Test if the working code folder compiles
@@ -28,7 +28,7 @@ def test_working_code_compile():
         with patch.object(sys, 'argv', [str(path)]):
             compiler.main()
 
-        out_str = "working-code/out/" + str(path).split("/")[-1].replace(".html",  ".c")
+        out_str = "working-code/out/" + str(path).split("/")[-1].replace(".html", ".c")
         assert Path(out_str).is_file()
 
 
@@ -43,7 +43,7 @@ def test_working_code_equals():
         with patch.object(sys, 'argv', [str(path)]):
             compiler.main()
 
-        out_str = enviorment_str + "/out/" + str(path).split("/")[-1].replace(".html",  ".c")
+        out_str = enviorment_str + "/out/" + str(path).split("/")[-1].replace(".html", ".c")
         backup_str = out_str.replace(enviorment_str, "working-code")
         assert enviorment.files_look_alike(out_str, backup_str)
 
@@ -54,7 +54,8 @@ def test_compiler_file_not_found(capsys):
     """
     Test if wrong file paths cause an error
     """
-    @enviorment.restore_working_code # capsys can not be passes so we use a inner function
+
+    @enviorment.restore_working_code  # capsys can not be passes so we use a inner function
     def test_compiler_file_not_found_inner():
         items = [
             "http://www.cs.uu.nl/docs/vakken/magr/portfolio/index.html",
