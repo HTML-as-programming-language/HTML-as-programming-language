@@ -18,11 +18,13 @@ class Param(Element):
                 break
 
     def diagnostics(self):
-        return [] if self.type or not isinstance(self.parent, Def) else [Diagnostic(
-            Severity.ERROR,
-            self.code_range,
-            "Unkown param type"
-        )]
+        return [] if self.type or not isinstance(self.parent, Def) else [
+            Diagnostic(
+                Severity.ERROR,
+                self.code_range,
+                "Unkown param type"
+            )
+        ]
 
 
 class Def(Element):
@@ -42,7 +44,8 @@ class Def(Element):
             if not isinstance(el, Param):
                 continue
             if not el.name:
-                d.append(Diagnostic(Severity.ERROR, el.code_range, "Param without name"))
+                d.append(Diagnostic(Severity.ERROR, el.code_range,
+                                    "Param without name"))
         return d
 
     def to_c(self, mapped_c):
@@ -52,7 +55,7 @@ class Def(Element):
             if key != "returns":
                 func_name = hyphenated_to_camel_case(key)
 
-        mapped_c.add(f"\n\n{return_type} {func_name}(", self)
+        mapped_c.add(f"\n{return_type} {func_name}(", self)
 
         first_param = True
         for el in self.children:
@@ -69,4 +72,4 @@ class Def(Element):
         mapped_c.indent(1)
         self.children_to_c(mapped_c)
         mapped_c.indent(-1)
-        mapped_c.add("}\n\n\n", self)
+        mapped_c.add("}\n\n", self)

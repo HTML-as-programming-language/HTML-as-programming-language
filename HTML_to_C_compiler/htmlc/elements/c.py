@@ -8,4 +8,5 @@ class C(Element):
     C: ..........
     """
     def to_c(self, mapped_c):
-        mapped_c.add(self.data + "\n\n", self)
+        if self.data:
+            mapped_c.add(f"{self.data}\n\n", self)

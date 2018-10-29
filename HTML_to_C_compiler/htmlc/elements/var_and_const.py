@@ -23,6 +23,7 @@ class Var(Element):
         self.var_name = None
         self.attr = None
         self.is_value_wrapper = True
+        self.prefix = ""
 
     def init(self):
         for key in self.attributes:
@@ -32,8 +33,11 @@ class Var(Element):
             self.attr = self.attributes[key]
 
         self.type = self.attributes.get("type", {}).get("val")
-        if self.type is None:  # user did not provide type like <var x=y type="int"/>
-            self.type = (self.attr["type"] or "unknown") if self.attr else "unknown"
+        if self.type is None:
+            # user did not provide type like <var x=y type="int"/>
+            self.type = (
+                    self.attr["type"] or "unknown"
+            ) if self.attr else "unknown"
 
     def diagnostics(self):
         d = []
@@ -48,7 +52,8 @@ class Var(Element):
                 Severity.ERROR,
                 self.code_range,
                 "Unknown variable type"
-                "\nPlease provide a type in the type attribute like <var x=y type='int'/>"
+                "\nPlease provide a type in the type attribute "
+                "like <var x=y type='int'/>"
             ))
         return d
 
@@ -59,7 +64,7 @@ class Var(Element):
         elif self.type == "char":
             val = "'{}'".format(val)
 
-        mapped_c.add(f"{self.type} {self.var_name}", self)
+        mapped_c.add(f"{self.prefix}{self.type} {self.var_name}", self)
 
         if not val:
             val = self.get_inner_value()
@@ -71,3 +76,10 @@ class Var(Element):
             mapped_c.add(f" = {val}", self)
 
         mapped_c.add(";\n", self)
+
+
+class Const(Var):
+
+    def __init__(self):
+        super().__init__()
+        self.prefix = "static const "

@@ -17,12 +17,18 @@ class Assign(Element):
         self.var_name = None
         self.is_value_wrapper = True
         self.val = None
+        self.operator = "="
 
     def init(self):
         for key in self.attributes:
             self.var_name = key
 
-        self.val = self.get_inner_value()
+        self.val = (
+                self.get_inner_value()
+                or
+                self.attributes[self.var_name].get("val")
+                if self.var_name else None
+        )
 
     def diagnostics(self):
         d = []
@@ -31,7 +37,8 @@ class Assign(Element):
                 Diagnostic(
                     Severity.ERROR,
                     self.code_range,
-                    "No variable name given (for example: <assign varName>123</assign>)"
+                    f"No variable name given "
+                    f"(for example: <{self.tagname} varName>123</assign>)"
                 )
             )
         elif not self.val:
@@ -39,15 +46,64 @@ class Assign(Element):
                 Diagnostic(
                     Severity.ERROR,
                     self.code_range,
-                    "Cannot assign nothing to {}".format(self.var_name)
+                    f"Usage: <{self.tagname} {self.var_name}>something"
+                    f"</{self.tagname}>"
                 )
             )
         return d
 
     def to_c(self, mapped_c):
-        mapped_c.add(f"{self.var_name} = ", self)
+        mapped_c.add(f"{self.var_name} {self.operator} ", self)
         if isinstance(self.val, Element):
             self.val.to_c(mapped_c)
         else:
-            mapped_c.add(self.val, self)
+            mapped_c.add(f"{self.val}", self)
         mapped_c.add(";\n", self)
+
+
+class Add(Assign):
+    def __init__(self):
+        super().__init__()
+        self.operator = "+="
+
+
+class Minus(Assign):
+    def __init__(self):
+        super().__init__()
+        self.operator = "-="
+
+
+class AndBits(Assign):
+    def __init__(self):
+        super().__init__()
+        self.operator = "&="
+
+
+class OrBits(Assign):
+    def __init__(self):
+        super().__init__()
+        self.operator = "|="
+
+
+class XorBits(Assign):
+    def __init__(self):
+        super().__init__()
+        self.operator = "^="
+
+
+class Multiply(Assign):
+    def __init__(self):
+        super().__init__()
+        self.operator = "*="
+
+
+class Divide(Assign):
+    def __init__(self):
+        super().__init__()
+        self.operator = "/="
+
+
+class Modulo(Assign):
+    def __init__(self):
+        super().__init__()
+        self.operator = "%="

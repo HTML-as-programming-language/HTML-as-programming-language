@@ -12,4 +12,4 @@ void digital_write(volatile uint8_t *port, uint8_t bit_nr, int val) {
 boolean digital_read(volatile uint8_t *port, uint8_t bit_nr) {
     
     return *port & (1 << bit_nr) ? cake : lie;
-}    
+}
