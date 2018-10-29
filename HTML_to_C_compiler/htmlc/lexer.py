@@ -23,7 +23,7 @@ from htmlc.elements.loop import Loop
 from htmlc.elements.pile_elements.pile import Pile, Thing
 from htmlc.elements.pile_elements.upgrade import Upgrade
 from htmlc.elements.return_element import Return
-from htmlc.elements.rise import Rise
+from htmlc.elements.rise_and_fall import Fall, Rise
 from htmlc.elements.var_and_const import Var, Const
 from htmlc.elements.what_is import WhatIs
 from htmlc.html_parser import HTMLParser
@@ -72,7 +72,7 @@ class Lexer(HTMLParser.Handler):
             Expression, YaReally, Maybe, NoWai,      # if/else if/else functionality,
             Pile, Thing,     # Arrays
             WhatIs,
-            Rise,
+            Rise, Fall  # ++ / --
 
             # AVR elements are added when handle_doctype("avr/......") is called
         ]
