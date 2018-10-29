@@ -33,8 +33,11 @@ class Var(Element):
             self.attr = self.attributes[key]
 
         self.type = self.attributes.get("type", {}).get("val")
-        if self.type is None:  # user did not provide type like <var x=y type="int"/>
-            self.type = (self.attr["type"] or "unknown") if self.attr else "unknown"
+        if self.type is None:
+            # user did not provide type like <var x=y type="int"/>
+            self.type = (
+                    self.attr["type"] or "unknown"
+            ) if self.attr else "unknown"
 
     def diagnostics(self):
         d = []
@@ -49,7 +52,8 @@ class Var(Element):
                 Severity.ERROR,
                 self.code_range,
                 "Unknown variable type"
-                "\nPlease provide a type in the type attribute like <var x=y type='int'/>"
+                "\nPlease provide a type in the type attribute "
+                "like <var x=y type='int'/>"
             ))
         return d
 

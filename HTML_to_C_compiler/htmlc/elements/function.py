@@ -18,11 +18,13 @@ class Param(Element):
                 break
 
     def diagnostics(self):
-        return [] if self.type or not isinstance(self.parent, Def) else [Diagnostic(
-            Severity.ERROR,
-            self.code_range,
-            "Unkown param type"
-        )]
+        return [] if self.type or not isinstance(self.parent, Def) else [
+            Diagnostic(
+                Severity.ERROR,
+                self.code_range,
+                "Unkown param type"
+            )
+        ]
 
 
 class Def(Element):
@@ -42,7 +44,8 @@ class Def(Element):
             if not isinstance(el, Param):
                 continue
             if not el.name:
-                d.append(Diagnostic(Severity.ERROR, el.code_range, "Param without name"))
+                d.append(Diagnostic(Severity.ERROR, el.code_range,
+                                    "Param without name"))
         return d
 
     def to_c(self, mapped_c):

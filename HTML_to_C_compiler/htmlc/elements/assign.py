@@ -26,7 +26,8 @@ class Assign(Element):
         self.val = (
                 self.get_inner_value()
                 or
-                self.attributes[self.var_name].get("val") if self.var_name else None
+                self.attributes[self.var_name].get("val")
+                if self.var_name else None
         )
 
     def diagnostics(self):
@@ -36,7 +37,8 @@ class Assign(Element):
                 Diagnostic(
                     Severity.ERROR,
                     self.code_range,
-                    f"No variable name given (for example: <{self.tagname} varName>123</assign>)"
+                    f"No variable name given "
+                    f"(for example: <{self.tagname} varName>123</assign>)"
                 )
             )
         elif not self.val:
@@ -44,7 +46,8 @@ class Assign(Element):
                 Diagnostic(
                     Severity.ERROR,
                     self.code_range,
-                    f"Usage: <{self.tagname} {self.var_name}>something</{self.tagname}>"
+                    f"Usage: <{self.tagname} {self.var_name}>something"
+                    f"</{self.tagname}>"
                 )
             )
         return d
@@ -104,4 +107,3 @@ class Modulo(Assign):
     def __init__(self):
         super().__init__()
         self.operator = "%="
-
