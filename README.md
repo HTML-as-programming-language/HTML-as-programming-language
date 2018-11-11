@@ -8,7 +8,62 @@ We aim to build a programming language that looks like HTML
 * [Usage](#usage)
 * [Write code for Arduino/AVR microcontrollers](#Write-code-for-Arduino/AVR-microcontrollers)
 
-## Installation & requirements
+<br/>
+
+# Examples
+## Functions
+```html
+<def multiplyFunction returns=int> <!-- You can create fucntions -->
+    <param a type=int/>
+    <param b type=int/>
+
+    <return>a * b</return>
+</def>
+
+<def main>
+    <var result type=int> <!-- Create variables -->
+        <multiplyFunction> <!-- and store the result of the function in the variable -->
+            <param>5</param>
+            <param>6</param>
+        </multiplyFunction>
+    </var>
+</def>
+```
+
+## Math
+```html
+<def main>
+    <var myInt=6/> <!-- Create variables -->
+    <assign myInt=10/> <!-- reassign variables -->
+    <multiply myInt>myInt</multiply> <!-- * -->
+    <divide myInt>3</divide> <!-- / -->
+    <minus myInt>10</minus> <!-- - -->
+    <add myInt>2</add> <!-- + -->
+    <modulo myInt>myInt</modulo> <!-- % the remainder when divided -->
+</def>
+```
+
+## Arrays
+```html
+<pile myVeryCoolPile type="boolean">  <!-- Array of booleans -->
+    <thing>cake</thing> <!-- True -->
+    <thing>lie</thing> <!-- False -->
+    <thing>cake</thing>
+    <thing>lie</thing>
+    <thing>cake</thing>
+    <thing>lie</thing>
+    <thing>lie</thing>
+    <thing>cake</thing>
+    <thing>lie</thing>
+</pile>
+```
+
+## And many more on the wiki
+https://github.com/HTML-as-programming-language/HTML-as-programming-language/wiki
+
+<br/>
+
+# Installation & requirements
 
 ### Requirements
 * Python 3 (tested with Python 3.7)
