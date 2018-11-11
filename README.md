@@ -1,6 +1,6 @@
 # HTML-as-programming-language
 [![Build Status](https://travis-ci.com/HTML-as-programming-language/HTML-as-programming-language.svg?branch=master)](https://travis-ci.com/HTML-as-programming-language/HTML-as-programming-language)
-We aim to build a programming language that looks like HTML
+We aim to build a programming language that looks like HTML. Currently it is HTML-inspired / XML-based but we hope be be fully 100% HTML based in the future.
 
 * [Examples](#examples)
 * [Installation & requirements](#installation--requirements)
