@@ -14,7 +14,7 @@ We aim to build a programming language that looks like HTML. The current syntax 
 # Examples
 ## [Functions](https://github.com/HTML-as-programming-language/HTML-as-programming-language/wiki/Variables-and-Constants)
 ```html
-<def multiplyFunction returns=int> <!-- You can create fucntions -->
+<def multiplyFunction returns=int> <!-- You can create functions -->
     <param a type=int/>
     <param b type=int/>
 
@@ -87,7 +87,7 @@ Get live code diagnostics by downloading [HTML-as-programming-language](https://
 (This extention requires 'HTML-as-programming-language' itself)
 
 # Language Server
-If you wish not to use VSCode but still want live code diagnostics you can use the HTML-language-server.
+If you do not wish to use VSCode but still want live code diagnostics you can use the HTML-language-server.
 
 The language server can be started with the following command:
 ```
@@ -102,7 +102,7 @@ htmlc my-code.html
 ```
 This wil output C-code to ./out/my-code.c
 
-If you want to write code for Arduino/AVR read the next section.
+If you want to write code for Arduino/AVR, read the next section.
 
 
 ## Write code for Arduino/AVR microcontrollers:
