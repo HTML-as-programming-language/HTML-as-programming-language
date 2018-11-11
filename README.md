@@ -2,7 +2,8 @@
 [![Build Status](https://travis-ci.com/HTML-as-programming-language/HTML-as-programming-language.svg?branch=master)](https://travis-ci.com/HTML-as-programming-language/HTML-as-programming-language)
 We aim to build a programming language that looks like HTML
 
-* [Installation & requirements](#installation-&-requirements)
+* [Examples](#examples)
+* [Installation & requirements](#installation--requirements)
 * [Visual Studio Code extention](#Visual-Studio-Code-extention)
 * [Language Server](#Language-Server)
 * [Usage](#usage)
@@ -80,12 +81,12 @@ PyPi package ([project page](https://pypi.org/project/HTML-as-programming-langua
 pip install HTML-as-programming-language
 ```
 
-## Visual Studio Code extention
+# Visual Studio Code extention
 Get live code diagnostics by downloading [HTML-as-programming-language](https://marketplace.visualstudio.com/items?itemName=HTML-as-programming-language.html-as-programming-language) for VSCode.
 
 (This extention requires 'HTML-as-programming-language' itself)
 
-## Language Server
+# Language Server
 If you wish not to use VSCode but still want live code diagnostics you can use the HTML-language-server.
 
 The language server can be started with the following command:
@@ -94,7 +95,7 @@ htmlclangsvr
 ```
 
 
-## Usage
+# Usage
 Transpile HTML-code to C-code:
 ```
 htmlc my-code.html
