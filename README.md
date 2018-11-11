@@ -11,7 +11,7 @@ We aim to build a programming language that looks like HTML
 <br/>
 
 # Examples
-## Functions
+## [Functions](https://github.com/HTML-as-programming-language/HTML-as-programming-language/wiki/Variables-and-Constants)
 ```html
 <def multiplyFunction returns=int> <!-- You can create fucntions -->
     <param a type=int/>
@@ -30,7 +30,7 @@ We aim to build a programming language that looks like HTML
 </def>
 ```
 
-## Math
+## [Math](https://github.com/HTML-as-programming-language/HTML-as-programming-language/wiki/Assignments)
 ```html
 <def main>
     <var myInt=6/> <!-- Create variables -->
@@ -43,7 +43,7 @@ We aim to build a programming language that looks like HTML
 </def>
 ```
 
-## Arrays
+## [Arrays](https://github.com/HTML-as-programming-language/HTML-as-programming-language/wiki/Piles-%28arrays%29)
 ```html
 <pile myVeryCoolPile type="boolean">  <!-- Array of booleans -->
     <thing>cake</thing> <!-- True -->
