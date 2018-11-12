@@ -13,7 +13,7 @@ ALWAYS_INCLUDE = [
 class CLinker:
 
     def __init__(self, element_tree, doctype):
-        self.htmlc_includes = {*ALWAYS_INCLUDE}
+        self.htmlc_includes = set()
         self.includes = set()
         self.element_tree = element_tree
         self.doctype = doctype
@@ -27,6 +27,8 @@ class CLinker:
 
     def get_includes_code(self):
         c = ""
+        for hi in ALWAYS_INCLUDE:
+            c += f'#include "htmlc/{hi}"\n'
         for hi in self.htmlc_includes:
             c += f'#include "htmlc/{hi}"\n'
         c += "\n"
