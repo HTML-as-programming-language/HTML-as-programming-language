@@ -12,17 +12,17 @@
 #define __led_PIN__ PIND
 
 void main() {
-	boolean pattern[10] = {cake, cake, lie, cake, lie, cake, lie, lie, cake, lie};
+	boolean pattern[10] = {cake, cake, cake, cake, lie, cake, lie, lie, cake, lie};
 	int i;
 
 	// set led as output:
 	digital_write(&__led_DDR__, __led_BIT_NR__, cake);
 	while (cake) {
 
-		// write <htmlc.elements.pile_elements.have.Have object at 0x04718130> to led:
+		// write <htmlc.elements.pile_elements.have.Have object at 0x03A430F0> to led:
 		digital_write(&__led_PORT__, __led_BIT_NR__, pattern[i]);
 		i = i >= 9 ? 0 : (i + 1);
-		_delay_ms(500);
+		_delay_ms(100);
 	}
 }
 
