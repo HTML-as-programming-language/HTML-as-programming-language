@@ -1,4 +1,5 @@
-# HTML-as-programming-language
+# Hyper Text MACHINE Language
+### HTML-as-programming-language
 [![Build Status](https://travis-ci.com/HTML-as-programming-language/HTML-as-programming-language.svg?branch=master)](https://travis-ci.com/HTML-as-programming-language/HTML-as-programming-language)
 We aim to build a programming language that looks like HTML. The current syntax is HTML-inspired / XML-based but we hope it to be fully 100% HTML-based in the future.
 
