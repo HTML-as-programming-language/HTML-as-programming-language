@@ -32,6 +32,34 @@ We aim to build a programming language that looks like HTML. The current syntax 
 </def>
 ```
 
+## [If/Else](https://github.com/HTML-as-programming-language/HTML-as-programming-language/wiki/expressions%2C-if-else)
+```html
+<!-- starting expression with condition -->
+<expression x="a > 1">
+	<!-- if a > 1 -->
+	<ya-really>
+		<!-- printf "a is greater than one (1) -->
+		<printf>
+			"a is greater than one (1)"
+		</printf>
+	</ya-really>
+
+	<!-- else if a == 0 -->
+	<maybe x="a == 0">
+		<printf>
+			"a is equal zero (0)"
+		</printf>
+	</maybe>
+
+	<!-- else -->
+	<no-wai>
+		<printf>
+			"a is minor than zero (0)"
+		</printf>
+	</no-wai>
+</expression>
+```
+
 ## [Math](https://github.com/HTML-as-programming-language/HTML-as-programming-language/wiki/Assignments)
 ```html
 <def main>
